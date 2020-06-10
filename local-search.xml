@@ -4,6 +4,19 @@
   
   
   <entry>
+    <title>A 3D Modeller</title>
+    <link href="/2020/06/09/A-3D-Modeller/"/>
+    <url>/2020/06/09/A-3D-Modeller/</url>
+    
+    <content type="html"><![CDATA[<h2 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h2><p><strong>万事开头难        ————佚名</strong><br><strong>有时候并不是事情太难，而是你太傻    ————Adrian</strong>  </p><p>读完项目介绍第一段文字，打开pycahrm，敲了一段代码，发现到处红波浪，opengl相关的函数也没有自动补全<br>慌了，想到自己好像没装库，百度OpenGL安装。跳转到python开源库<em><a href="https://www.lfd.uci.edu/~gohlke/pythonlibs/#pyopengl" target="_blank" rel="noopener">https://www.lfd.uci.edu/~gohlke/pythonlibs/#pyopengl</a></em><br>先不管三七二十一下载最新版，cmd运行指令 <code>pip install</code>， 提示没有pip指令。<br>意识到python配置有问题 ，cmd中查看python版本，跳转应用商店。百度again<br>修改环境变量path，将python放在Microsoft\WindowsApps前面，该问题解决。再cmd运行python，提示conda未激活<br>于是<code>conda activate</code>，提示没有conda指令。将anaconda和anaconda\Scripts添加到环境变量后解决。<br>然而继续报错，CommandNotFoundError: Your shell has not been properly configured to use ‘conda activate’<br>输入source后解决<br>此时意识到OpenGL版本可能也有问题，重新下载对应python3.7的pyopengl_accelerate<br>重新pip，成功安装，但是pycharm中代码问题没有解决。怀疑自己glut也没有安装。同样找文件下载，发现找不到对应的版本。<br><strong>此时醒悟，进入pycharm搜寻相关库安装，freeglut安装后问题没有解决，又在里面装了pyopengl，test程序得以运行。</strong>  </p><p>  反省：虽然每一步都在解决眼前的小问题，但是最后证明前面的行为毫无意义:/<br>然而，代码红波浪问题仍未解决，自动补全仍然没有，尝试csdn方案未果，暂无头绪…  </p>]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Plan daily, Summarize Weekly</title>
     <link href="/2020/06/05/Plan-daily-Summarize-Weekly/"/>
     <url>/2020/06/05/Plan-daily-Summarize-Weekly/</url>
