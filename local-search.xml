@@ -4,11 +4,30 @@
   
   
   <entry>
+    <title>SLAM #1</title>
+    <link href="/2020/06/14/SLAM-1/"/>
+    <url>/2020/06/14/SLAM-1/</url>
+    
+    <content type="html"><![CDATA[<p> 若是把6.12当作我入坑的第一天的话，今天是第三天。考试周还想着做各种各样的事，似乎有点影响状态，希望做好时间管理  </p><h2 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h2><p> 就像在上次A 3D Modeller一样，环境构造总是一个并不顺利的过程。(看起来我短时间不会有时间做完那个小项目了)  </p><h3 id="安装Ubuntu-20-04"><a href="#安装Ubuntu-20-04" class="headerlink" title="安装Ubuntu 20.04"></a>安装Ubuntu 20.04</h3><p>打很久以前就计划装Linux在电脑上。很久前就像给电脑换块大点的SSD。很久前就像自己更深入的学习C++/python。<strong>总是想的特别多而行动力跟不上。</strong><br>好在现在有一个可以被push或者自我push的理由，所以花了几乎一整天时间完成了这件事。<br>做启动盘，安装Ubuntu。遇到的第一个问题应该是显卡驱动冲突。修改<code>quiet splash</code>为<code>nouveau.modeset=0</code>后解决。<br>一路安装，完成后插着U盘直接reboot了。现在想想这一步操作应该关机拔掉U盘再开？还不是特别清楚。后果是进入Ubuntu直接黑屏，recovery模式看到处于只读状态。<br>改为读写后进入normal-boot问题就解决了<em>原因不详</em>  </p><h3 id="Ubuntu初试"><a href="#Ubuntu初试" class="headerlink" title="Ubuntu初试"></a>Ubuntu初试</h3><p>时间关系还没有装任何和SLAM直接相关的库/软件。熟悉了一下Ubuntu的操作后安装一系列基本软件，其中安装deepin-wine的QQ/微信时均出现了不理想的情况<br>VSCode 已初步配置完成，vim的使用大致还记得，或许就是C++需要再反复熟悉一下。  </p><p>本周似乎确实没有做什么别的remarkable的事情，暂时先这样</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>Pragmatic Work</category>
+      
+    </categories>
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>A 3D Modeller</title>
     <link href="/2020/06/09/A-3D-Modeller/"/>
     <url>/2020/06/09/A-3D-Modeller/</url>
     
-    <content type="html"><![CDATA[<h2 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h2><p><strong>万事开头难        ————佚名</strong><br><strong>有时候并不是事情太难，而是你太傻    ————Adrian</strong>  </p><p>读完项目介绍第一段文字，打开pycahrm，敲了一段代码，发现到处红波浪，opengl相关的函数也没有自动补全<br>慌了，想到自己好像没装库，百度OpenGL安装。跳转到python开源库<em><a href="https://www.lfd.uci.edu/~gohlke/pythonlibs/#pyopengl" target="_blank" rel="noopener">https://www.lfd.uci.edu/~gohlke/pythonlibs/#pyopengl</a></em><br>先不管三七二十一下载最新版，cmd运行指令 <code>pip install</code>， 提示没有pip指令。<br>意识到python配置有问题 ，cmd中查看python版本，跳转应用商店。百度again<br>修改环境变量path，将python放在Microsoft\WindowsApps前面，该问题解决。再cmd运行python，提示conda未激活<br>于是<code>conda activate</code>，提示没有conda指令。将anaconda和anaconda\Scripts添加到环境变量后解决。<br>然而继续报错，CommandNotFoundError: Your shell has not been properly configured to use ‘conda activate’<br>输入source后解决<br>此时意识到OpenGL版本可能也有问题，重新下载对应python3.7的pyopengl_accelerate<br>重新pip，成功安装，但是pycharm中代码问题没有解决。怀疑自己glut也没有安装。同样找文件下载，发现找不到对应的版本。<br><strong>此时醒悟，进入pycharm搜寻相关库安装，freeglut安装后问题没有解决，又在里面装了pyopengl，test程序得以运行。</strong>  </p><p>  反省：虽然每一步都在解决眼前的小问题，但是最后证明前面的行为毫无意义:/<br>然而，代码红波浪问题仍未解决，自动补全仍然没有，尝试csdn方案未果，暂无头绪…  </p>]]></content>
+    <content type="html"><![CDATA[<h2 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h2><p><strong>万事开头难        ————佚名</strong><br><strong>有时候并不是事情太难，而是你太傻    ————Adrian</strong>  </p><p>读完项目介绍第一段文字，打开pycahrm，敲了一段代码，发现到处红波浪，opengl相关的函数也没有自动补全<br>慌了，想到自己好像没装库，百度OpenGL安装。跳转到python开源库<em><a href="https://www.lfd.uci.edu/~gohlke/pythonlibs/#pyopengl" target="_blank" rel="noopener">https://www.lfd.uci.edu/~gohlke/pythonlibs/#pyopengl</a></em><br>先不管三七二十一下载最新版，cmd运行指令 <code>pip install</code>， 提示没有pip指令。<br>意识到python配置有问题 ，cmd中查看python版本，跳转应用商店。百度again<br>修改环境变量path，将python放在Microsoft\WindowsApps前面，该问题解决。再cmd运行python，提示conda未激活<br>于是<code>conda activate</code>，提示没有conda指令。将anaconda和anaconda\Scripts添加到环境变量后解决。<br>然而继续报错，CommandNotFoundError: Your shell has not been properly configured to use ‘conda activate’<br>输入source后解决<br>此时意识到OpenGL版本可能也有问题，重新下载对应python3.7的pyopengl_accelerate<br>重新pip，成功安装，但是pycharm中代码问题没有解决。怀疑自己glut也没有安装。同样找文件下载，发现找不到对应的版本。<br><strong>此时醒悟，进入pycharm搜寻相关库安装，freeglut安装后问题没有解决，又在里面装了pyopengl，test程序得以运行。</strong>  </p><p>  反省：虽然每一步都在解决眼前的小问题，但是最后证明前面的行为毫无意义:/<br>然而，代码红波浪问题仍未解决，自动补全仍然没有，尝试csdn方案未果，暂无头绪…    </p><p><em>由于topic来的太快(做这个项目的效率太低)，暂时很难继续开展，搁置之。2020-6-14</em></p>]]></content>
     
     
     <categories>
