@@ -4,11 +4,81 @@
   
   
   <entry>
-    <title>SLAM #3</title>
+    <title>meta数据处理的一些感想</title>
+    <link href="/2020/07/04/meta%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E7%9A%84%E4%B8%80%E4%BA%9B%E6%84%9F%E6%83%B3/"/>
+    <url>/2020/07/04/meta%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E7%9A%84%E4%B8%80%E4%BA%9B%E6%84%9F%E6%83%B3/</url>
+    
+    <content type="html"><![CDATA[<p>  今天在做meta分析的数据处理，不断的觉得做好实验真是一件非常讲究的事情，从前的自己也真的过于naive，高估了自己解决问题的能力或者说低估了科研过程中各种小问题的复杂性。  </p><p>  遇到最大的问题大概就是数据换算，也是我生发出感慨的最大一点。最简单的SEM-SD换算便不多提。<br>  主要迷惑的地方在于<strong>median(IQR) - mean±SD</strong>的换算，以及随之引出的正态分布和非正态分布差别。<br>  为了保障一致性，实验的单个指标不能既用SD表示又用IQR表示，所以一旦某个数据是非正态分布，该指标便都用IQR描述，并且算出的P也是非正态的<br>  然而事实上(或许)，无情之处就在于——没人能保障一组数据一定是正态的。世界总是充满了<strong>uncertainty</strong>，甚至说这才是正常而真实的实验。我们需要做的就是用正确的态度处理好这些非正态和uncertainty.<br>  <em>让我想到最近重新开始听的《金融经济学》</em>  </p><p>  其余的便是一些琐碎的事情吧。在研究如何转换的道路上一去不复返。看到我国学者在这方面做出的成果，看到今年的新文章对非正态数据更优的算法，很好，更好的是他们都留下了工具以供快捷的使用。让我由衷的想：<strong>感谢科研道路上前人修的路，甚至是造了电梯</strong><br>只不过可惜的是工具使用的过程中发现了问题，电梯也是会出现故障的哈。  </p><p>更琐碎的是不断吐槽的实验和论文内容，数据记录不严谨不完善，方法描述不清晰，实验过程可感的敷衍…<br>不知道若是自己亲自去做这些事情，会有什么样的结果？  </p><p>反思一下自己的态度。兄弟看一些东西的时候不是那么仔细，但是我似乎<strong>过于急躁</strong>了一些。且不说本来这些事情就应该是我独立解决的。既然没有解决的问题请教别人，就更应该容忍细节上的疏忽，好好提醒就行了。收住心里的焦虑。  </p><p><strong>没人应该对你负责任</strong><br><strong>做好自己应做的distribution</strong></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>Meteoric Thoughts</category>
+      
+    </categories>
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>SLAM #5</title>
+    <link href="/2020/07/04/SLAM-5/"/>
+    <url>/2020/07/04/SLAM-5/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>SLAM #4 李群与李代数</title>
+    <link href="/2020/07/02/SLAM-4/"/>
+    <url>/2020/07/02/SLAM-4/</url>
+    
+    <content type="html"><![CDATA[<p><em>为什么叫”李”群？  //  S.Lie提出</em>  </p><h2 id="李群与李代数基础"><a href="#李群与李代数基础" class="headerlink" title="李群与李代数基础"></a>李群与李代数基础</h2><p>群(Group): <strong>一种集合</strong>加上<strong>一种运算</strong>的代数结构，该运算需满足：<br>封闭性， 结合律， 幺元， 逆。<br><em>s.t. subject to(such that)</em><br>矩阵中常见的群:  一般线性群GL(n)  特殊正交群SO(n)  特殊欧式群SE(n)<br><strong>李群</strong>：具有连续(光滑)性质的群  </p><h3 id="李代数"><a href="#李代数" class="headerlink" title="李代数"></a>李代数</h3><p>define: 描述李群单位元附近的正切空间，由集合$\mathbb{V}$,数域$\mathbb F$和二元运算[,]组成<br>满足： 1. 封闭性  2. 双线性  3. 自反性  4. 雅可比等价<br>二元运算被称为<strong>李括号</strong>  </p><script type="math/tex; mode=display">\begin{array}{c}\boldsymbol{\xi}^{\wedge}=\left[\begin{array}{cc}\boldsymbol{\phi}^{\wedge} & \boldsymbol{\rho} \\\mathbf{0}^{\mathrm{T}} & 0\end{array}\right] \in \mathbb{R}^{4 \times 4} \\\mathfrak{s o}(3)=\left\{\boldsymbol{\phi} \in \mathbb{R}^{3}, \pmb {\Phi}=\boldsymbol{\phi}^{\wedge} \in \mathbb{R}^{3 \times 3}\right\} \\{\left[\boldsymbol{\phi}_{1}, \boldsymbol{\phi}_{2}\right]=\left(\boldsymbol{\Phi}_{1} \boldsymbol{\Phi}_{2}-\boldsymbol{\Phi}_{2} \boldsymbol{\Phi}_{1}\right)^{\vee}} \\{\left[\boldsymbol{\xi}_{1}, \boldsymbol{\xi}_{2}\right]=\left(\boldsymbol{\xi}_{1}^{\wedge} \boldsymbol{\xi}_{2}^{\wedge}-\boldsymbol{\xi}_{2}^{\wedge} \boldsymbol{\xi}_{1}^{\wedge}\right)^{\vee}}\end{array}</script><script type="math/tex; mode=display">\operatorname {\mathfrak{se}}(3)=\left\{\pmb \xi=\left[\begin{array}{l}\pmb \rho \\\phi\end{array}\right] \in \mathbb{R}^{6}, \boldsymbol{\rho} \in \mathbb{R}^{3}, \boldsymbol{\phi} \in \mathfrak{s o}(3), \boldsymbol{\xi}^{\wedge}=\left[\begin{array}{cc}\boldsymbol{\phi}^{\wedge} & \rho \\0^{\mathrm{T}} & 0\end{array}\right] \in \mathbb{R}^{4 \times 4}\right\}</script>]]></content>
+    
+    
+    <categories>
+      
+      <category>Pragmatic Work</category>
+      
+    </categories>
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>断舍离</title>
+    <link href="/2020/07/01/%E6%96%AD%E8%88%8D%E7%A6%BB/"/>
+    <url>/2020/07/01/%E6%96%AD%E8%88%8D%E7%A6%BB/</url>
+    
+    <content type="html"><![CDATA[<p>  花了四天的零碎时间翻完了断舍离这本书，还是留下点什么吧<br>  老实说它并没有给我带来太多触动，从书的内容本身来说甚至有点遭人嫌弃。过于罗嗦直白与推销式的文字不讨我喜。<br>可以说主要还是看了其中的思想吧，这并不是一个新鲜的概念，但是书里说的比较清晰。很希望我家的长辈学习践行一下“断舍离”，但是这不太现实。<br>总结起来，知识密度太低，看看观念，或有收获吧。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>Meteoric Thoughts</category>
+      
+    </categories>
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>SLAM #3 三维空间刚体运动</title>
     <link href="/2020/06/28/SLAM-3/"/>
     <url>/2020/06/28/SLAM-3/</url>
     
-    <content type="html"><![CDATA[<p>  <em>为什么Unity和Direct3D是左手系？</em>  </p><h2 id="旋转矩阵"><a href="#旋转矩阵" class="headerlink" title="旋转矩阵"></a>旋转矩阵</h2><p>  <strong>外积</strong> a $\times$ b = a ^ b<br>  定义反对称矩阵： </p><script type="math/tex; mode=display">a^\land =   \left[ \begin{matrix}   0 & -a_3 & a_2 \\   a_3 & 0 & -a_1 \\   -a_2 & a_1 & 0  \end{matrix}  \right] \tag{3}</script><p>旋转矩阵(Rotation Matrix)刻画旋转前后同一个向量的坐标变换关系，各分量为两个坐标系基的内积，又称方向余弦矩阵(Direction Cosine Matrix)<br>旋转矩阵为行列式为1的正交矩阵<em>行列式-1称瑕旋转</em><br>定义n维旋转矩阵的集合：</p><script type="math/tex; mode=display">SO(n)=\lbrace {\pmb R} \in {\Bbb R}^{n \times n} | {\pmb{RR}}^T = {\pmb I}, det({\pmb R} = 1)\rbrace</script><p>SO(n)为<strong>特殊正交群</strong>(Special Orthogonal Group)<br>加上平移向量，得到向量<strong>a</strong>在两个坐标系下坐标的关系为：</p><script type="math/tex; mode=display">\pmb {a_1 = R_{12}a_2 + t_{12}}</script><p><em>此处<script type="math/tex">{\pmb R_{12}}</script> 是“把2变换到1”，从右到左读；$\pmb t_{12}$ 则是坐标系1原点指向2原点的向量,是在1中取的坐标</em><br>由于该变换关系非线性，引入齐次坐标与变换矩阵$\pmb T$(Transform Matrix)  </p><script type="math/tex; mode=display">\left[\begin{array}{l}{\pmb a}^{\prime} \\1\end{array}\right]=\left[\begin{array}{ll}{\pmb R} & {\pmb t} \\{\pmb 0}^{T} & 1\end{array}\right]\left[\begin{array}{l}{\pmb a} \\1\end{array}\right] \stackrel{\operatorname{def}}{=} {\pmb T}\left[\begin{array}{l}{\pmb a} \\1\end{array}\right]</script><p>这种左上旋转矩阵，右侧平移向量，左右下为<strong>0</strong>向量和1的矩阵又称特殊欧式群(Special Euclidean Group):  </p><script type="math/tex; mode=display">\mathrm{SE}(3)=\left\{T=\left[\begin{array}{cc}\boldsymbol{R} & \boldsymbol{t} \\\mathbf{0}^{\mathrm{T}} & 1\end{array}\right] \in \mathbb{R}^{4 \times 4} \mid \boldsymbol{R} \in \mathrm{SO}(3), \pmb{t} \in \mathbb{R}^{3}\right\}</script><h2 id="旋转向量和欧拉角"><a href="#旋转向量和欧拉角" class="headerlink" title="旋转向量和欧拉角"></a>旋转向量和欧拉角</h2><p>  由于前述表示方法的冗余性和约束，引入<strong>旋转向量</strong>(Axis-Angle)描述旋转<br>  利用<strong>罗德里格斯公式</strong>(Rodrigues’s Formula)表示旋转向量到旋转矩阵的转换关系，并通过取<strong>迹</strong>(trace)反向转换: </p><script type="math/tex; mode=display">\begin{array}{c}{\pmb R}=\cos \theta {\pmb I}+(1-\cos \theta) {\pmb {n n}}^T+\sin \theta{\pmb n}^{\wedge} \\\\\theta=\arccos \frac{\operatorname{tr}(\pmb R)-1}{2}\end{array}</script><p>注意到旋转轴上的向量在旋转后不发生任何改变: $\pmb{ Rn = n}$,<br>所以转轴$\pmb n$是矩阵$\pmb R$特征值1对应的特征向量  </p><p><strong>欧拉角</strong>，用来直观描述旋转过程。常用：“偏航-俯仰-滚转”(yaw-pitch-roll，rpy角,等价ZYX轴旋转)。<br><em>注意二三次都是以旋转<strong>后</strong>的Y/X轴</em><br>由此可用$\left[{r,p,y}\right] ^ T$来描述任意旋转。<br>但是，其缺点在于会遇到<strong>万向锁问题</strong>(Gimbal Lock)<br><strong>找不到不带奇异性的三维向量描述方式</strong></p><h2 id="四元数"><a href="#四元数" class="headerlink" title="四元数"></a>四元数</h2>]]></content>
+    <content type="html"><![CDATA[<p>  <em>为什么Unity和Direct3D是左手系？</em>  </p><h2 id="旋转矩阵"><a href="#旋转矩阵" class="headerlink" title="旋转矩阵"></a>旋转矩阵</h2><p>  <strong>外积</strong> a $\times$ b = a ^ b<br>  定义反对称矩阵： </p><script type="math/tex; mode=display">a^\land =   \left[ \begin{matrix}   0 & -a_3 & a_2 \\   a_3 & 0 & -a_1 \\   -a_2 & a_1 & 0  \end{matrix}  \right] \tag{3}</script><p>旋转矩阵(Rotation Matrix)刻画旋转前后同一个向量的坐标变换关系，各分量为两个坐标系基的内积，又称方向余弦矩阵(Direction Cosine Matrix)<br>旋转矩阵为行列式为1的正交矩阵<em>行列式-1称瑕旋转</em><br>定义n维旋转矩阵的集合：</p><script type="math/tex; mode=display">SO(n)=\lbrace {\pmb R} \in {\Bbb R}^{n \times n} | {\pmb{RR}}^T = {\pmb I}, det({\pmb R}) = 1\rbrace</script><p>SO(n)为<strong>特殊正交群</strong>(Special Orthogonal Group)<br>加上平移向量，得到向量<strong>a</strong>在两个坐标系下坐标的关系为：</p><script type="math/tex; mode=display">\pmb {a_1 = R_{12}a_2 + t_{12}}</script><p><em>此处<script type="math/tex">{\pmb R_{12}}</script> 是“把2变换到1”，从右到左读；$\pmb t_{12}$ 则是坐标系1原点指向2原点的向量,是在1中取的坐标</em><br>由于该变换关系非线性，引入齐次坐标与变换矩阵$\pmb T$(Transform Matrix)  </p><script type="math/tex; mode=display">\left[\begin{array}{l}{\pmb a}^{\prime} \\1\end{array}\right]=\left[\begin{array}{ll}{\pmb R} & {\pmb t} \\{\pmb 0}^{T} & 1\end{array}\right]\left[\begin{array}{l}{\pmb a} \\1\end{array}\right] \stackrel{\operatorname{def}}{=} {\pmb T}\left[\begin{array}{l}{\pmb a} \\1\end{array}\right]</script><p>这种左上旋转矩阵，右侧平移向量，左右下为<strong>0</strong>向量和1的矩阵又称特殊欧式群(Special Euclidean Group):  </p><script type="math/tex; mode=display">\mathrm{SE}(3)=\left\{T=\left[\begin{array}{cc}\boldsymbol{R} & \boldsymbol{t} \\\mathbf{0}^{\mathrm{T}} & 1\end{array}\right] \in \mathbb{R}^{4 \times 4} \mid \boldsymbol{R} \in \mathrm{SO}(3), \pmb{t} \in \mathbb{R}^{3}\right\}</script><h2 id="旋转向量和欧拉角"><a href="#旋转向量和欧拉角" class="headerlink" title="旋转向量和欧拉角"></a>旋转向量和欧拉角</h2><p>  由于前述表示方法的冗余性和约束，引入<strong>旋转向量</strong>(Axis-Angle)描述旋转<br>  利用<strong>罗德里格斯公式</strong>(Rodrigues’s Formula)表示旋转向量到旋转矩阵的转换关系，并通过取<strong>迹</strong>(trace)反向转换: </p><script type="math/tex; mode=display">\begin{array}{c}{\pmb R}=\cos \theta {\pmb I}+(1-\cos \theta) {\pmb {n n}}^T+\sin \theta{\pmb n}^{\wedge} \\\\\theta=\arccos \frac{\operatorname{tr}(\pmb R)-1}{2}\end{array}</script><p>注意到旋转轴上的向量在旋转后不发生任何改变: $\pmb{ Rn = n}$,<br>所以转轴$\pmb n$是矩阵$\pmb R$特征值1对应的特征向量  </p><p><strong>欧拉角</strong>，用来直观描述旋转过程。常用：“偏航-俯仰-滚转”(yaw-pitch-roll，rpy角,等价ZYX轴旋转)。<br><em>注意二三次都是以旋转<strong>后</strong>的Y/X轴</em><br>由此可用$\left[{r,p,y}\right] ^ T$来描述任意旋转。<br>但是，其缺点在于会遇到<strong>万向锁问题</strong>(Gimbal Lock)<br><strong>找不到不带奇异性的三维向量描述方式</strong></p><h2 id="四元数"><a href="#四元数" class="headerlink" title="四元数"></a>四元数</h2><p><strong>四元数(Quaternion)既是紧凑的，也没有奇异性</strong><br>类比复数，三维旋转可以用单位四元数描述: $ \pmb q = q_0 + q_1 i + q_2 j + q_3 k $<br>或用一个标量和一个向量来表示：  </p><script type="math/tex; mode=display">\begin{array}{l}\pmb q=[s,\pmb v]^{\mathrm{T}}, \quad s=q_{0} \in \mathbb{R}, \quad \pmb v=\left[q_{1}, q_{2}, q_{3}\right]^{\mathrm{T}} \in \mathbb{R}^{3}\end{array}</script><p>从运算法则来看，大致与复数运算一致。需要注意由于虚部相乘是做外积，不满足交换律  <em>除非虚部共线，外积为0</em><br><em>为什么14讲里四元数的模要用范数符号表示？</em>  </p><p><strong>四元数表示旋转</strong><br>首先将三维空间点用虚四元数描述：  </p><script type="math/tex; mode=display">\pmb p = \left[{0,x,y,z}\right]^T = \left[{0,\pmb v}\right]^T</script><p>那么旋转后的点$ \pmb p^\prime $可表示为:  </p><script type="math/tex; mode=display">{\pmb{p^\prime = q p q^{-1}}}</script><p>四元数到旋转矩阵和旋转向量的转换:  </p><script type="math/tex; mode=display">\begin{array}{l}\pmb {R=v v}^{T}+s^{2} \pmb I+2 s \pmb v^{\wedge}+\left(\pmb v^{\wedge}\right)^{2} \\ \\\left\{\begin{array}{l}\theta=2 \arccos q_{0} \\{\left[n_{x}, n_{y}, n_{z}\right]^{\mathrm{T}}=\left[q_{1}, q_{2}, q_{3}\right]^{\mathrm{T}} / \sin \frac{\theta}{2}}\end{array}\right. \end{array}</script><h2 id="相似、仿射、射影变换"><a href="#相似、仿射、射影变换" class="headerlink" title="相似、仿射、射影变换"></a>相似、仿射、射影变换</h2><ol><li><strong>相似变换</strong>  增加一个自由度(7)允许均匀缩放<script type="math/tex; mode=display">\pmb {T}_S = \left[\begin{array}{ll}{s \pmb R} & {\pmb t} \\{\pmb 0}^{T} & 1\end{array}\right]</script></li><li><strong>仿射变换</strong>  $\pmb A$只用是可逆矩阵而不必正交(12)，所以仿射变换后立方体不再是方的，各个面仍为平行四边形<script type="math/tex; mode=display">\pmb {T}_A = \left[\begin{array}{ll}{ \pmb A} & {\pmb t} \\{\pmb 0}^{T} & 1\end{array}\right]</script></li><li><strong>射影变换</strong>  最一般的变换(3D 15)<script type="math/tex; mode=display">\pmb {T}_P = \left[\begin{array}{ll}{ \pmb A} & {\pmb t} \\{\pmb a}^{T} & v\end{array}\right]</script></li></ol><h2 id=""><a href="#" class="headerlink" title=" "></a> </h2>]]></content>
     
     
     <categories>
