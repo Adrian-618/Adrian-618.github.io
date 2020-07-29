@@ -4,6 +4,44 @@
   
   
   <entry>
+    <title>记KITTI Odometry的使用</title>
+    <link href="/2020/07/28/%E8%AE%B0KITTI-Odometry%E7%9A%84%E4%BD%BF%E7%94%A8/"/>
+    <url>/2020/07/28/%E8%AE%B0KITTI-Odometry%E7%9A%84%E4%BD%BF%E7%94%A8/</url>
+    
+    <content type="html"><![CDATA[<p>我需要使用的是KITTI-Odometry-Velodyne</p><p>Day 1. 遇到的第一个大困难： <strong>下载KITTI</strong>  </p><p>不得不说这东西真麻烦。官网今天直接上不去了，不得不找替代品。前面寻到了KITTI-object的，还好没有下载了再说，没什么效益。找到了一个种子有velodyne，80g，可惜的是速度堪忧。尝试了Transmission，无用，迅雷第一次还动了，1M左右的速度实在等不住，登了会员，结果始终不动了，只好作罢。最后找到了一个老哥实在是人才，把整个KITTI-odometry 解压的数据放在自己的百度网盘里，一个文件夹1000-5000个数据，直接下载总是失败，转存也很困难，折腾了一道又一道，到晚上总算全部下下来，43552个文件，希望没有少文件。  </p><p>Day 2. 有一种不祥的预感：  <strong>KITTI to rosbag</strong></p><p>首先荒诞的事情在于我今天可以上cvlibs了，其次在于今天研究良久，发现没有官方的velogyne to rosbag，官方的方案是从rawdata中mapping到对应的sequences再转换。而那意味着昨天又白忙。所幸的是GitHub上找到了一个直接convert的代码，只是不知道是否可行…先尝试吧，不希望昨天白费功夫。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>Pragmatic Work</category>
+      
+    </categories>
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>ROS安装问题记录</title>
+    <link href="/2020/07/27/ROS%E5%AE%89%E8%A3%85%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/"/>
+    <url>/2020/07/27/ROS%E5%AE%89%E8%A3%85%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/</url>
+    
+    <content type="html"><![CDATA[<h1 id="ROS安装问题记录"><a href="#ROS安装问题记录" class="headerlink" title="ROS安装问题记录"></a>ROS安装问题记录</h1><p>首先有一点需要在最先强调：ubuntu 20.04，对应ROS是<strong>noetic</strong>，所以之前的版本都安不上！  </p><p>很多博客没有强调版本的影响，我也没有意识到版本更替之后各种依赖的复杂改变，导致今天安装ROS相当不顺利。  记录过程以及其中遇到的坑： </p><ol><li><p>添加软件源。按部就班，但是镜像源我后面<code>sudo apt-get update</code>始终没有release文件，普遍说删掉对应的源就好了，但是删了不就下载不了了吗？回避问题却没有解决问题。最后我也只能使用官方源不再报错，我怀疑是noetic在镜像源里还没有之类的？      </p><p><code>sudo sh -c &#39;echo &quot;deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main&quot; &gt; /etc/apt/sources.list.d/ros-latest.list&#39;</code></p></li><li><p>添加密钥。先吐槽一下有些教程直接把密钥丢在代码里而没有说怎么获取，我寻思那这还叫密钥吗？也不知道是他们有问题还是我理解错了…强调一下网站直接上可能获取不了，解析一下加到hosts里就好了。配置完可以删掉。</p><p><code>wget https://raw.githubusercontent.com/ros/rosdistro/master/ros.key</code></p></li><li><p>第三点，卡了憨憨的我好就的一个地方，也是我事先强调的版本问题：跟着人家准备kinetic，结果20.04必须noetic… <code>$ sudo apt-get install ros-kinetic-desktop-full</code> 把knetic替换了之后就好了。这里还出了一点问题，因为源或者网络的原因，有一部分安装包没下下来，所以ROS其实还只下载没安装呢，结果我以为是都弄好了只补上没下的就行了，憨憨的走了一大圈后面的步骤，发现自己根本没安装… 这里说明下，没自动下的包我直接手动到链接里下载然后dpkg安装的,直接重来应该也行，最后再执行一遍install就好了。</p></li><li><p>rosdep  这玩意就离谱。直接<code>sudo rosdep init</code> 行不通，有个老铁说装一个<code>python-rosdep2</code> ，这事儿就玄妙了，没有这个，只能<code>sudo apt install python3-rosdep2</code>  但是吧一装上，noetic的一堆包就得被卸掉，比如极其重要的roscore… 就很离谱，重装的话这边resdep又卸了。试了几次，最后是 <code>python3-rosdep</code>  成功共存了，我琢磨应该是20.04的python版本和rosdep对应的版本之间的问题，但是想不明白前面那个老铁是怎么没遇到这个问题的。看到知乎也有讲版本问题的，多多注意吧。另外<code>rosdep update</code>的时候网络问题挺严重，建议挂个tz或者多尝试几次</p></li><li><p>配置环境变量，弄清楚前面的烂摊子之后就没什么问题了。小乌龟总算跑起来了，不易啊</p></li></ol><p>最后吐槽一下可能是电脑配置问题或者我分的机械盘的原因，装个ROS仿佛花了一万年，没忍住一睡就是俩小时…</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>Pragmatic Work</category>
+      
+    </categories>
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>关于华一专业分享</title>
     <link href="/2020/07/22/%E5%85%B3%E4%BA%8E%E5%8D%8E%E4%B8%80%E4%B8%93%E4%B8%9A%E5%88%86%E4%BA%AB/"/>
     <url>/2020/07/22/%E5%85%B3%E4%BA%8E%E5%8D%8E%E4%B8%80%E4%B8%93%E4%B8%9A%E5%88%86%E4%BA%AB/</url>
