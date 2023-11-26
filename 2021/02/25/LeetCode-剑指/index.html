@@ -1,0 +1,682 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" href="/img/favicon.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Adrian">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="无所事事过了整个寒假，应该战斗起来了。暑假还没着落，从实习开始吧。争取20天刷完 数组中重复的数字不小心看到了提示，知道要用hash表就觉得思路非常清晰了。重要的是没有提示的情况下要自己想出来。对这种确定范围的查重问题，往往可以考虑一下哈希表。 运行出来复杂度似乎不太理想，再思考一下有没有优化方案。 看评论区的意思，这题在限制时间&#x2F;空间复杂度的前提下就会比较困难，思路有很多种。与此同时">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LeetCode 剑指">
+<meta property="og:url" content="http://example.com/2021/02/25/LeetCode-%E5%89%91%E6%8C%87/index.html">
+<meta property="og:site_name" content="Adrian">
+<meta property="og:description" content="无所事事过了整个寒假，应该战斗起来了。暑假还没着落，从实习开始吧。争取20天刷完 数组中重复的数字不小心看到了提示，知道要用hash表就觉得思路非常清晰了。重要的是没有提示的情况下要自己想出来。对这种确定范围的查重问题，往往可以考虑一下哈希表。 运行出来复杂度似乎不太理想，再思考一下有没有优化方案。 看评论区的意思，这题在限制时间&#x2F;空间复杂度的前提下就会比较困难，思路有很多种。与此同时">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-02-25T08:30:59.000Z">
+<meta property="article:modified_time" content="2021-03-02T14:24:24.966Z">
+<meta property="article:author" content="Adrian">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>LeetCode 剑指 - Adrian</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.5-a","typing":{"enable":false,"typeSpeed":50,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"tajs":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Adrian</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" 
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle">LeetCode 剑指</span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2021-02-25 16:30" pubdate>
+          February 25, 2021
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">LeetCode 剑指</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p> 无所事事过了整个寒假，应该战斗起来了。暑假还没着落，从实习开始吧。争取20天刷完</p>
+<h3 id="数组中重复的数字"><a href="#数组中重复的数字" class="headerlink" title="数组中重复的数字"></a>数组中重复的数字</h3><p>不小心看到了提示，知道要用hash表就觉得思路非常清晰了。重要的是没有提示的情况下要自己想出来。对这种确定范围的查重问题，往往可以考虑一下哈希表。</p>
+<p>运行出来复杂度似乎不太理想，再思考一下有没有优化方案。</p>
+<p>看评论区的意思，这题在限制时间&#x2F;空间复杂度的前提下就会比较困难，思路有很多种。与此同时对hash表的写法好像也可以更加简洁。运用in &#x2F; not in做判断，就不需要一个个加了。这样对大序列次数可能会少。</p>
+<p>换成了”<strong>原地交换</strong>“的算法，时间显著减少，但是内存消耗却还是差不多。有点没想明白，不过这个方式比较精妙，值得复习。看到题解里萝卜坑的解释，写的很好，一下就懂了。</p>
+<h3 id="替换空格"><a href="#替换空格" class="headerlink" title="替换空格"></a>替换空格</h3><p>这题乍一看思路就很清楚，直接逐个往后面加就行了。意外的是写出来效率没有特别的差。</p>
+<p>讨论区学到了一个新的库函数<code>return s.replace(&quot; &quot;,&quot;%20&quot;)</code>，比自己写的效率差，算增长知识了</p>
+<h3 id="从头到尾打印链表"><a href="#从头到尾打印链表" class="headerlink" title="从头到尾打印链表"></a>从头到尾打印链表</h3><p>感觉自己的思路有点邪门，结果忘了处理空链表的情况。想来想去咋处理不了了，懵了。看了下评论，原来<code>if head</code>就行了啊，淦。</p>
+<p>歪门邪道写出来结果好像还行，不算特别捞。看了下别人的发现自己是个憨憨，完全可以正着存进数组，最后反着输出就行了！服了(这样并没有让代码变快) <strong>辅助栈法</strong></p>
+<p>惊了，看到评论区竟然还有递归的！开拓思路了，这样的确可以，因为做的是一个反序，恰恰也是递归擅长解决的事情。(然而慢得离谱)</p>
+<h3 id="左旋转字符串"><a href="#左旋转字符串" class="headerlink" title="左旋转字符串"></a>左旋转字符串</h3><p>先用常规方法求解，前n个另存，然后删掉再加在末尾。 两次遍历同理</p>
+<p>考虑到列表的种种特性，复习了一下截取，切片等操作，重写，略有提升。</p>
+<p>注意，字符串也可做切片操作。但是由于Python中字符串是不可变对象，没法原地翻转</p>
+<p>如果用C++可以实现空间复杂度O(1)</p>
+<h3 id="用两个栈实现队列"><a href="#用两个栈实现队列" class="headerlink" title="用两个栈实现队列"></a>用两个栈实现队列</h3><p>这题有点看不懂，反复琢磨。看了评论区才明白。不过好像还是不太会做。拖延太久了，直接看题解。写的还是很清楚，思想就是两个栈实现两类操作，一个是入队，一个是出队。搞清楚题目的意思其实就觉得这题比较简单了。不过也是在先入为主看答案的前提下，还要再复习。这题算是水过去了。</p>
+<h3 id="二叉树的镜像"><a href="#二叉树的镜像" class="headerlink" title="二叉树的镜像"></a>二叉树的镜像</h3><p>观察题目，想到等比数列。或许可以把整个列表分log2(n+1)次局部翻转后相加.发现求对数指数都要引入math库，可能要再想办法。</p>
+<p>节点为0时需不需要特殊考虑？</p>
+<p>简单写了一下，发现好像不能把二叉树当作列表考虑，没法求长度？</p>
+<p>换个思路，从最尾端开始换。观察到第n和(n+1)&#x2F;2对称。问题仍然是总长度呀。有点没辙。</p>
+<p>递归？琢磨了半天有思路了，但是感觉太复杂，也不是很会写递归，决定放弃。</p>
+<p>看了看别人的题解，递归确实可以，不过从上往下递归是更顺思路合情理的做法，我有点胡思乱想。在C++的解法里也可以看到迭代做的，用栈或者队列。</p>
+<p>感觉自己对递归的理解还不是很深，或者说对二叉树的认识有点问题。精妙的地方在于从上往下，子节点经过多次交换之后的确到了自己对应的位置，而我没有考虑出这一点。</p>
+<p>注意细节，需要用temp暂存，python平行赋值则避免此问题。</p>
+<p>读了下栈的代码，感觉和从上而下的递归逻辑好像基本是一样的</p>
+<p>这题还需要过段时间再复习。</p>
+<h3 id="打印从1到最大的n位数"><a href="#打印从1到最大的n位数" class="headerlink" title="打印从1到最大的n位数"></a>打印从1到最大的n位数</h3><p>先按常规思路写了一个。首先根据n得到最大位数，然后循环输出。时间和空间复杂度似乎太高了</p>
+<p>读了下讨论，有一些点。对python3来说，range的返回值可以当作list用(严格说不是list的class，现在已经不能通过了)，然后运算符**就是求乘方(指数运算，幂运算之类的，anyway)，不用一次次乘！当然，正经来说第二个循环append还是有意义的。</p>
+<p>看起来在剑指的原题里这题是涉及到了大数？似乎很难，后面可以找原题学习一下</p>
+<p>看了下题解，因为用字符串拼接表示数，也是一个递归问题，逐位遍历过去然后拼起来。还需要额外注意首位0的问题。似懂非懂，还需复习。</p>
+<h3 id="斐波拉契数列"><a href="#斐波拉契数列" class="headerlink" title="斐波拉契数列"></a>斐波拉契数列</h3><p>这题和下一题其实是一模一样的，</p>
+<h3 id="青蛙跳台阶问题"><a href="#青蛙跳台阶问题" class="headerlink" title="青蛙跳台阶问题"></a>青蛙跳台阶问题</h3><p>经典的递归题目。因为对递归不熟悉还是摸索了半天写出来。数字变大的时候超出时间限制，可能算法设计的有问题？</p>
+<p>看了下评论区，的确就是个斐波拉契，用迭代要比递归效率更高。此题涉及<strong>动态规划</strong>，是陌生的知识点，趁机学习一下。求余时，使用<strong>循环求余法</strong>，可以避免大数越界(python不担心)</p>
+<p>最后的代码相当简洁！警惕，递归虽然思路简单，效率太低，迭代则巧妙灵活，要多思考！</p>
+<p>NOTE 2.26：明天回学校，可能要少做。后面拉起来。</p>
+<h3 id="旋转数组的最小数字"><a href="#旋转数组的最小数字" class="headerlink" title="旋转数组的最小数字"></a>旋转数组的最小数字</h3><p>这题最简单的思路就是直接遍历，写出来结果中上。我想间隔遍历可能更快一些，不过复杂度好像没有本质区别。二分法呢？好像实现不了？看评论的确还是有二分法的，思路没错，没能自己实现，主要是对二分法有些遗忘了。搞笑今天还和焕聊到了。(奇怪的是用二分法运行时间变慢了hhh)注意在相等的情况下，缩小区间来重新判断，这个地方需要想清楚为什么可行。值得复习！</p>
+<p>冷知识，python有min函数。</p>
+<h2 id="知识点部分"><a href="#知识点部分" class="headerlink" title="知识点部分"></a>知识点部分</h2><p><strong>温故而知新</strong></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/ljzblog/p/11255832.html">python列表list的截取问题</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Pragmatic-Work/" class="category-chain-item">Pragmatic Work</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>LeetCode 剑指</div>
+      <div>http://example.com/2021/02/25/LeetCode-剑指/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Adrian</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>February 25, 2021</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/03/02/%E6%84%BF%E6%9C%9B%E6%B8%85%E5%8D%95-2021/" title="愿望清单 2021">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">愿望清单 2021</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/02/22/%E5%AE%9C%E6%98%8C%E9%9A%8F%E8%AE%B0/" title="宜昌随记">
+                        <span class="hidden-mobile">宜昌随记</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

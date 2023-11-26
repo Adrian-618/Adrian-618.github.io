@@ -1,0 +1,712 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" href="/img/favicon.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Adrian">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="为什么Unity和Direct3D是左手系？   旋转矩阵  外积 a $\times$ b &#x3D; a ^ b  定义反对称矩阵：$$a^\land &#x3D;   \left[ \begin{matrix}   0 &amp; -a_3 &amp; a_2 \   a_3 &amp; 0 &amp; -a_1 \   -a_2 &amp; a_1 &amp; 0  \end{mat">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SLAM #3 三维空间刚体运动">
+<meta property="og:url" content="http://example.com/2020/06/28/SLAM-3/index.html">
+<meta property="og:site_name" content="Adrian">
+<meta property="og:description" content="为什么Unity和Direct3D是左手系？   旋转矩阵  外积 a $\times$ b &#x3D; a ^ b  定义反对称矩阵：$$a^\land &#x3D;   \left[ \begin{matrix}   0 &amp; -a_3 &amp; a_2 \   a_3 &amp; 0 &amp; -a_1 \   -a_2 &amp; a_1 &amp; 0  \end{mat">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-06-28T12:56:42.000Z">
+<meta property="article:modified_time" content="2020-08-06T14:20:59.712Z">
+<meta property="article:author" content="Adrian">
+<meta property="article:tag" content="SLAM">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>SLAM #3 三维空间刚体运动 - Adrian</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.5-a","typing":{"enable":false,"typeSpeed":50,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"tajs":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Adrian</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" 
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle">SLAM #3 三维空间刚体运动</span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2020-06-28 20:56" pubdate>
+          June 28, 2020
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">SLAM #3 三维空间刚体运动</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>  <em>为什么Unity和Direct3D是左手系？</em>  </p>
+<h2 id="旋转矩阵"><a href="#旋转矩阵" class="headerlink" title="旋转矩阵"></a>旋转矩阵</h2><p>  <strong>外积</strong> a $\times$ b &#x3D; a ^ b<br>  定义反对称矩阵：<br>$$<br>a^\land &#x3D;   \left[<br> \begin{matrix}<br>   0 &amp; -a_3 &amp; a_2 \<br>   a_3 &amp; 0 &amp; -a_1 \<br>   -a_2 &amp; a_1 &amp; 0<br>  \end{matrix}<br>  \right] \tag{3}<br>$$<br>旋转矩阵(Rotation Matrix)刻画旋转前后同一个向量的坐标变换关系，各分量为两个坐标系基的内积，又称方向余弦矩阵(Direction Cosine Matrix)<br>旋转矩阵为行列式为1的正交矩阵<em>行列式-1称瑕旋转</em><br>定义n维旋转矩阵的集合：<br>$$SO(n)&#x3D;\lbrace {\pmb R} \in {\Bbb R}^{n \times n} | {\pmb{RR}}^T &#x3D; {\pmb I}, det({\pmb R}) &#x3D; 1\rbrace$$<br>SO(n)为<strong>特殊正交群</strong>(Special Orthogonal Group)<br>加上平移向量，得到向量<strong>a</strong>在两个坐标系下坐标的关系为：<br>$$\pmb {a_1 &#x3D; R_{12}a_2 + t_{12}} $$<br><em>此处$${\pmb R_{12}}$$ 是“把2变换到1”，从右到左读；$\pmb t_{12}$ 则是坐标系1原点指向2原点的向量,是在1中取的坐标</em><br>由于该变换关系非线性，引入齐次坐标与变换矩阵$\pmb T$(Transform Matrix)<br>$$\left[\begin{array}{l}<br>{\pmb a}^{\prime} \<br>1<br>\end{array}\right]&#x3D;\left[\begin{array}{ll}<br>{\pmb R} &amp; {\pmb t} \<br>{\pmb 0}^{T} &amp; 1<br>\end{array}\right]\left[\begin{array}{l}<br>{\pmb a} \<br>1<br>\end{array}\right] \stackrel{\operatorname{def}}{&#x3D;} {\pmb T}\left[\begin{array}{l}<br>{\pmb a} \<br>1<br>\end{array}\right]$$<br>这种左上旋转矩阵，右侧平移向量，左右下为<strong>0</strong>向量和1的矩阵又称特殊欧式群(Special Euclidean Group):<br>$$\mathrm{SE}(3)&#x3D;\left{T&#x3D;\left[\begin{array}{cc}<br>\boldsymbol{R} &amp; \boldsymbol{t} \<br>\mathbf{0}^{\mathrm{T}} &amp; 1<br>\end{array}\right] \in \mathbb{R}^{4 \times 4} \mid \boldsymbol{R} \in \mathrm{SO}(3), \pmb{t} \in \mathbb{R}^{3}\right}$$</p>
+<h2 id="旋转向量和欧拉角"><a href="#旋转向量和欧拉角" class="headerlink" title="旋转向量和欧拉角"></a>旋转向量和欧拉角</h2><p>  由于前述表示方法的冗余性和约束，引入<strong>旋转向量</strong>(Axis-Angle)描述旋转<br>  利用<strong>罗德里格斯公式</strong>(Rodrigues’s Formula)表示旋转向量到旋转矩阵的转换关系，并通过取<strong>迹</strong>(trace)反向转换:<br>$$\begin{array}{c}<br>{\pmb R}&#x3D;\cos \theta {\pmb I}+(1-\cos \theta) {\pmb {n n}}^T+\sin \theta{\pmb n}^{\wedge} \<br>\<br>\theta&#x3D;\arccos \frac{\operatorname{tr}(\pmb R)-1}{2}<br>\end{array}$$<br>注意到旋转轴上的向量在旋转后不发生任何改变: $\pmb{ Rn &#x3D; n}$,<br>所以转轴$\pmb n$是矩阵$\pmb R$特征值1对应的特征向量  </p>
+<p><strong>欧拉角</strong>，用来直观描述旋转过程。常用：“偏航-俯仰-滚转”(yaw-pitch-roll，rpy角,等价ZYX轴旋转)。<br><em>注意二三次都是以旋转<strong>后</strong>的Y&#x2F;X轴</em><br>由此可用$\left[{r,p,y}\right] ^ T$来描述任意旋转。<br>但是，其缺点在于会遇到<strong>万向锁问题</strong>(Gimbal Lock)<br><strong>找不到不带奇异性的三维向量描述方式</strong></p>
+<h2 id="四元数"><a href="#四元数" class="headerlink" title="四元数"></a>四元数</h2><p><strong>四元数(Quaternion)既是紧凑的，也没有奇异性</strong><br>类比复数，三维旋转可以用单位四元数描述: $ \pmb q &#x3D; q_0 + q_1 i + q_2 j + q_3 k $<br>或用一个标量和一个向量来表示：<br>$$\begin{array}{l}<br>\pmb q&#x3D;[s,\pmb v]^{\mathrm{T}}, \quad s&#x3D;q_{0} \in \mathbb{R}, \quad \pmb v&#x3D;\left[q_{1}, q_{2}, q_{3}\right]^{\mathrm{T}} \in \mathbb{R}^{3}<br>\end{array}$$<br>从运算法则来看，大致与复数运算一致。需要注意由于虚部相乘是做外积，不满足交换律  <em>除非虚部共线，外积为0</em><br><em>为什么14讲里四元数的模要用范数符号表示？</em>  </p>
+<p><strong>四元数表示旋转</strong><br>首先将三维空间点用虚四元数描述：<br>$$\pmb p &#x3D; \left[{0,x,y,z}\right]^T &#x3D; \left[{0,\pmb v}\right]^T$$<br>那么旋转后的点$ \pmb p^\prime $可表示为:<br>$$ {\pmb{p^\prime &#x3D; q p q^{-1}}} $$<br>四元数到旋转矩阵和旋转向量的转换:<br>$$\begin{array}{l}<br>\pmb {R&#x3D;v v}^{T}+s^{2} \pmb I+2 s \pmb v^{\wedge}+\left(\pmb v^{\wedge}\right)^{2} \ \<br>\left{\begin{array}{l}<br>\theta&#x3D;2 \arccos q_{0} \<br>{\left[n_{x}, n_{y}, n_{z}\right]^{\mathrm{T}}&#x3D;\left[q_{1}, q_{2}, q_{3}\right]^{\mathrm{T}} &#x2F; \sin \frac{\theta}{2}}<br>\end{array}\right.<br>\end{array}$$  </p>
+<h2 id="相似、仿射、射影变换"><a href="#相似、仿射、射影变换" class="headerlink" title="相似、仿射、射影变换"></a>相似、仿射、射影变换</h2><ol>
+<li><strong>相似变换</strong>  增加一个自由度(7)允许均匀缩放<br>$$<br>\pmb {T}_S &#x3D;<br>\left[\begin{array}{ll}<br>{s \pmb R} &amp; {\pmb t} \<br>{\pmb 0}^{T} &amp; 1<br>\end{array}\right]<br>$$</li>
+<li><strong>仿射变换</strong>  $\pmb A$只用是可逆矩阵而不必正交(12)，所以仿射变换后立方体不再是方的，各个面仍为平行四边形<br>$$<br>\pmb {T}_A &#x3D;<br>\left[\begin{array}{ll}<br>{ \pmb A} &amp; {\pmb t} \<br>{\pmb 0}^{T} &amp; 1<br>\end{array}\right]<br>$$</li>
+<li><strong>射影变换</strong>  最一般的变换(3D 15)<br>$$<br>\pmb {T}_P &#x3D;<br>\left[\begin{array}{ll}<br>{ \pmb A} &amp; {\pmb t} \<br>{\pmb a}^{T} &amp; v<br>\end{array}\right]<br>$$</li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Pragmatic-Work/" class="category-chain-item">Pragmatic Work</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/SLAM/" class="print-no-link">#SLAM</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>SLAM #3 三维空间刚体运动</div>
+      <div>http://example.com/2020/06/28/SLAM-3/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Adrian</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>June 28, 2020</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/07/01/%E6%96%AD%E8%88%8D%E7%A6%BB/" title="断舍离">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">断舍离</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/06/27/%E5%BE%AE%E6%9C%BA%E5%8E%9F%E7%90%86/" title="微机原理">
+                        <span class="hidden-mobile">微机原理</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

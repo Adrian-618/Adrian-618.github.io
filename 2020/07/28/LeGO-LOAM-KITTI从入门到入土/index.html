@@ -1,0 +1,680 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" href="/img/favicon.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Adrian">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="目标：使用LeGO-LOAM测试KITTI-Odometry-Velodyne并求其精度 Day 0. ROS-noetic安装 Day 1. 遇到的第一个“大”困难： 下载KITTI   不得不说这东西真麻烦。官网今天直接上不去了，不得不找替代品。前面寻到了KITTI-object的，还好没有下载了再说，没什么效益。找到了一个种子有velodyne，80g，可惜的是速度堪忧。尝试了Transmi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LeGO-LOAM-KITTI 从入门到入土(1)">
+<meta property="og:url" content="http://example.com/2020/07/28/LeGO-LOAM-KITTI%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F/index.html">
+<meta property="og:site_name" content="Adrian">
+<meta property="og:description" content="目标：使用LeGO-LOAM测试KITTI-Odometry-Velodyne并求其精度 Day 0. ROS-noetic安装 Day 1. 遇到的第一个“大”困难： 下载KITTI   不得不说这东西真麻烦。官网今天直接上不去了，不得不找替代品。前面寻到了KITTI-object的，还好没有下载了再说，没什么效益。找到了一个种子有velodyne，80g，可惜的是速度堪忧。尝试了Transmi">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-07-28T13:33:52.000Z">
+<meta property="article:modified_time" content="2020-08-02T01:38:00.241Z">
+<meta property="article:author" content="Adrian">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>LeGO-LOAM-KITTI 从入门到入土(1) - Adrian</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.5-a","typing":{"enable":false,"typeSpeed":50,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"tajs":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Adrian</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" 
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle">LeGO-LOAM-KITTI 从入门到入土(1)</span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2020-07-28 21:33" pubdate>
+          July 28, 2020
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">LeGO-LOAM-KITTI 从入门到入土(1)</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p><strong>目标</strong>：使用LeGO-LOAM测试KITTI-Odometry-Velodyne并求其精度</p>
+<p>Day 0. <strong><a target="_blank" rel="noopener" href="https://adrian-618.github.io/2020/07/27/ROS%E5%AE%89%E8%A3%85%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/">ROS-noetic安装</a></strong></p>
+<p>Day 1. 遇到的第一个“大”困难： <strong>下载KITTI</strong>  </p>
+<p>不得不说这东西真麻烦。官网今天直接上不去了，不得不找替代品。前面寻到了KITTI-object的，还好没有下载了再说，没什么效益。找到了一个种子有velodyne，80g，可惜的是速度堪忧。尝试了Transmission，无用，迅雷第一次还动了，1M左右的速度实在等不住，登了会员，结果始终不动了，只好作罢。最后找到了一个老哥实在是人才，把整个KITTI-odometry 解压的数据放在自己的百度网盘里，一个文件夹1000-5000个数据，直接下载总是失败，转存也很困难，折腾了一道又一道，到晚上总算全部下下来，43552个文件，希望没有少文件。(此时的我还没有意识到问题的严重性)  </p>
+<p>Day 2. 有一种不祥的预感：  <strong>KITTI to rosbag</strong></p>
+<p>首先荒诞的事情在于我今天可以上cvlibs了，其次在于今天研究良久，发现没有官方的velogyne to rosbag，官方的方案是从rawdata中mapping到对应的sequences再转换。而那意味着昨天又白忙。所幸的是GitHub上找到了一个直接convert的代码，只是不知道是否可行…先尝试吧，不希望昨天白费功夫。</p>
+<p>Day 3. LeGO-LOAM的安装初探。  </p>
+<p>总觉得今天也是什么都没干成的一天</p>
+<p>先装GTSAM，好像没有出现问题，还比较顺利。</p>
+<p>创建ROS工作空间，补上上次没做的事情，然后想直接装LeGO-LOAM for KITTI , 可惜编译的时候报错，<code>lego_loam: Cannot locate rosdep definition for [gtsam]</code></p>
+<p>没找到解决方案，想着那我就先安装LeGO-LOAM.</p>
+<p>安装LeGO-LOAM的过程中问题挺多的，最开始因为ROS只能编译单一功能包，把LeGO-LOAM for KITTI搬出来了，然后catkin_make的时候报openCV的错</p>
+<p><code>fatal error: opencv/cv.h: 没有那个文件或目录</code></p>
+<p>，以为是我没有装(我也不知道到底装了没)，于是重新装了一遍openCV. 按照人家的博客检查找不到，也是版本问题。前面报错的地方后来发现是头文件不对，在openCV 4版本头文件变了，修改代码<code>include &lt;opencv/cv.h&gt;</code>为<code>include &lt;opencv2/imgproc.hpp&gt;</code>就好了。紧接着又报PCL的错，我又觉得自己没装PCL(笑)，研究了一圈发现装了，仔细查PCL报错，发现还是cmake里面出了问题，makelist里面C++标准默认的11改成14，问题解决。</p>
+<p>至此，<strong>装上了LeGO-LOAM</strong>,实话说有点蒙蔽，觉得还是应该直接用for KITTI吧。</p>
+<p>用人家的lidar2rosbag跑了一下，完美的<strong>没有</strong>出正确结果。感觉被坑了。真TM是小傻逼找大傻逼，傻逼齐活了</p>
+<p>继续研究了一晚上，找来了示例包nsh_indoors_outdoors，发现自己的LeGO-LOAM或者gtsam,pcl多半也没装好，就很愁</p>
+<p>重装了一遍LeGO-LOAM, 前面edge &#x2F; planar 全部飘红的问题解决了(不知道怎么解决的，可能是把代码里Frame_id的”&#x2F;“全部去掉了吧…)但是还是报<code>mapOptmization-6</code>的错，只查到-7可能是gtsam的问题，又加上重试for KITTI仍然老问题，索性卸载gtsam 4.0.3，装原代码版本。(卸载也研究了有一会，这方面的资料比较少。最后在build里make uninstall干掉了)</p>
+<p>重装gtsam 4.0.0 alpha2， 重试kitti发现仍然报一样的错，仔细看发现是里面的lego-loam在报错，不禁担心这会不会是问题的根源…</p>
+<p>重新make的时候开始报Eigen的错…</p>
+<p>Day 4. <strong>重装LeGO环境</strong></p>
+<p>实在干不出来了，Eigen这个错解决不了，索性又把gtsam删了，从PCL开始重装。(此处发现该版本没有写uninstall，手动卸载之)</p>
+<p>最开始又头铁不听人言，装了最新版的VTK 9.0 ； PCL 1.11.0 . 倒是一直没怎么报错(缺少PCAP顺利解决了) ，就是最后缺<code>pcl_visualization</code>. 看了下，多半还是vtk的版本不对齐，于是又卸载，重装，重新编译(惊觉这一天好像又什么都没做).终于可以顺利把<strong>pcl测试代码</strong>跑通了。出图像的瞬间有种泪目的感觉，这两天都没啥成果，终于有好消息了。</p>
+<p>稳扎稳打 ！继续检查openCV.昨天openCV报错的地方，是opencv.pc没有配置，完成后成功打开摄像头看到自己。喜笑颜开哈哈哈哈。</p>
+<p>重装GTSAM 4.0.0. alpha 2仍然报错，索性装4.0.3,基本顺利。编译lego-loam时有ros的pcl找不到的问题，去把pcl_ros等文件夹里的cmakefile改了对应路径之后解决。</p>
+<p>终于<strong>又</strong>跑起来lego-loam了，赶紧运行了一下nsh包，没有报错，但是点云看起来还是不太对…而且此时悲伤的卡死了(汗)。 <em>这是我唯一一次在没点velodyne的情况下看到了点云，虽然看起来就很不对…</em></p>
+<p>重启再跑，一开始没点云显示，后来开始报错闪退…明天继续</p>
+<p>Day 5. 验证LOAM运行，成功<strong>入土</strong>，推翻重来！</p>
+<p>今天继续尝试LeGO-LOAM,不报错，一直没有TF data，不出点云。想到试试LOAM，控制变量嘛，结果报错<code>Error transforming odometry &#39;Odometry&#39; from frame &#39;/camera_init&#39; to frame &#39;camera_init&#39;</code>，同时还有<code>[laserMapping-4] process has died</code></p>
+<p>想到之前报过frame_id不能以”&#x2F;“开头，修改后解决，但是第二个问题仍然存在。苦也！</p>
+<p>回头试试lego-kitti，装上了但是报错，已经无心研究这个，基本笃定我的环境不匹配了 <em>其实觉得人家的代码也有问题</em></p>
+<p>又是一天过去，实在解决不了，准备重装ubuntu 16.04了。</p>
+<p><strong>总结</strong>  </p>
+<p>六天时间过去，每天生活在焦虑和无奈中。焦虑于这么简单的问题始终解决不了，进度远低于预期 ，无奈于很多问题没有参考也没有头绪，解决不了的时候只能重来试试。学到的东西主要是各种库和软件的安装吧[扶额]。或者说是锻炼了我面对终端里各种红色的应对能力。在我看来显然这一切很让人沮丧，不过或许这就是真实的科研民工吧。</p>
+<p>侧面上看的话，或许表明事先的调查很重要，并非新版就会很好，有些东西也不一定是想当然的向下兼容。</p>
+<p>八月再努力吧！</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Pragmatic-Work/" class="category-chain-item">Pragmatic Work</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>LeGO-LOAM-KITTI 从入门到入土(1)</div>
+      <div>http://example.com/2020/07/28/LeGO-LOAM-KITTI从入门到入土/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Adrian</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>July 28, 2020</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/08/01/%E9%93%81%E8%A1%80%E5%90%8D%E5%B0%86%E8%BE%9B%E5%BC%83%E7%96%BE/" title="铁血名将辛弃疾">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">铁血名将辛弃疾</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/07/27/ROS%E5%AE%89%E8%A3%85%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/" title="ROS-noetic安装问题记录">
+                        <span class="hidden-mobile">ROS-noetic安装问题记录</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

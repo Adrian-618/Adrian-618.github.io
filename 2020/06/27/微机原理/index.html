@@ -1,0 +1,705 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" href="/img/favicon.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Adrian">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="微机突击备考的证明，结果差强人意(勉强使人满意) 半导体存储器接口异步SRAM   工作模式 CE WE OE I&#x2F;O0~I&#x2F;Om    保持(微功耗) 1 x x 高阻   读 0 1 0 数据输出   写 0 0 1 数据输入   输出无效 0 1 1 高阻   存储容量扩展  参见 例6.2   存储空间映射  一对一整体映射：芯片存储单元在逻辑存储空间中地址连续且唯一将">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微机原理">
+<meta property="og:url" content="http://example.com/2020/06/27/%E5%BE%AE%E6%9C%BA%E5%8E%9F%E7%90%86/index.html">
+<meta property="og:site_name" content="Adrian">
+<meta property="og:description" content="微机突击备考的证明，结果差强人意(勉强使人满意) 半导体存储器接口异步SRAM   工作模式 CE WE OE I&#x2F;O0~I&#x2F;Om    保持(微功耗) 1 x x 高阻   读 0 1 0 数据输出   写 0 0 1 数据输入   输出无效 0 1 1 高阻   存储容量扩展  参见 例6.2   存储空间映射  一对一整体映射：芯片存储单元在逻辑存储空间中地址连续且唯一将">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-06-27T08:12:43.000Z">
+<meta property="article:modified_time" content="2020-07-05T13:44:40.955Z">
+<meta property="article:author" content="Adrian">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>微机原理 - Adrian</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.5-a","typing":{"enable":false,"typeSpeed":50,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"tajs":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Adrian</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" 
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle">微机原理</span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2020-06-27 16:12" pubdate>
+          June 27, 2020
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">微机原理</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p><em>微机突击备考的证明，结果差强人意(勉强使人满意)</em></p>
+<h2 id="半导体存储器接口"><a href="#半导体存储器接口" class="headerlink" title="半导体存储器接口"></a>半导体存储器接口</h2><h3 id="异步SRAM"><a href="#异步SRAM" class="headerlink" title="异步SRAM"></a>异步SRAM</h3><table>
+<thead>
+<tr>
+<th>工作模式</th>
+<th>CE</th>
+<th>WE</th>
+<th>OE</th>
+<th>I&#x2F;O0~I&#x2F;Om</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>保持(微功耗)</td>
+<td>1</td>
+<td>x</td>
+<td>x</td>
+<td>高阻</td>
+</tr>
+<tr>
+<td>读</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>数据输出</td>
+</tr>
+<tr>
+<td>写</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>数据输入</td>
+</tr>
+<tr>
+<td>输出无效</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>高阻</td>
+</tr>
+</tbody></table>
+<h3 id="存储容量扩展"><a href="#存储容量扩展" class="headerlink" title="存储容量扩展"></a>存储容量扩展</h3><p>  参见 <strong>例6.2</strong>  </p>
+<h3 id="存储空间映射"><a href="#存储空间映射" class="headerlink" title="存储空间映射"></a>存储空间映射</h3><p>  <strong>一对一整体映射</strong>：芯片存储单元在逻辑存储空间中地址连续且唯一<br>将地址总线除去连接地址线之的所有剩余高位地址译码之后连接到片选端,全译码法。<br>  <strong>一对多整体映射</strong>：物理存储地址不唯一,同一物理存储芯片占据了多段逻辑存储空间<br>  剩余高位地址线至少有一位不取唯一值，部分译码法，极端情况线选法  </p>
+<p>  逻辑门电路译码：与非门组合<br>  译码器译码&#x2F;Verilog译码：参见<strong>例6.4附近</strong><br>  多级译码综合：参照<strong>例6.6</strong> <em>全译码</em>  <strong>例6.7&#x2F;6.8</strong> <em>部分译码</em>  </p>
+<h3 id="存储器组织结构"><a href="#存储器组织结构" class="headerlink" title="存储器组织结构"></a>存储器组织结构</h3><p>  关注<strong>例6.9</strong>  </p>
+<h3 id="多类型数据访问"><a href="#多类型数据访问" class="headerlink" title="多类型数据访问"></a>多类型数据访问</h3><p>  两种方法 参考<strong>例6.11-13</strong>  </p>
+<h3 id="存储器控制器"><a href="#存储器控制器" class="headerlink" title="存储器控制器"></a>存储器控制器</h3><p>  掠过，有需查书  </p>
+<h2 id="I-O-接口"><a href="#I-O-接口" class="headerlink" title="I&#x2F;O 接口"></a>I&#x2F;O 接口</h2><h3 id="接口功能-接口构成"><a href="#接口功能-接口构成" class="headerlink" title="接口功能&#x2F;接口构成"></a>接口功能&#x2F;接口构成</h3><p>  记名方便查找  </p>
+<h3 id="I-O-接口数据传送方式"><a href="#I-O-接口数据传送方式" class="headerlink" title="I&#x2F;O 接口数据传送方式"></a>I&#x2F;O 接口数据传送方式</h3><p>  串行 &#x2F; 并行</p>
+<h3 id="接口电路数据传送控制方式"><a href="#接口电路数据传送控制方式" class="headerlink" title="接口电路数据传送控制方式"></a>接口电路数据传送控制方式</h3><p>  <strong>程序控制方式</strong> ： 查询&#x2F;无条件<br>  <strong>中断控制</strong><br>  <strong>DMA</strong>  </p>
+<h3 id="独立-I-O-接口寻址"><a href="#独立-I-O-接口寻址" class="headerlink" title="独立 I&#x2F;O 接口寻址"></a>独立 I&#x2F;O 接口寻址</h3><ol>
+<li>I&#x2F;O 接口空间和存储空间是独立的、分开的</li>
+<li>用专用的输入&#x2F;输出(如IN、OUT)指令实现数据传送。</li>
+<li>CPU 对I&#x2F;O 设备的读&#x2F;写控制用专门的I&#x2F;O 读&#x2F;写控制信号(如IOR、IOW)。</li>
+</ol>
+<p>微机系统的微处理器都采用独立I&#x2F;O 寻址方式，一个I&#x2F;O 接口常有若干个端口地址。</p>
+<h3 id="存储器映像I-O-接口寻址"><a href="#存储器映像I-O-接口寻址" class="headerlink" title="存储器映像I&#x2F;O 接口寻址"></a>存储器映像I&#x2F;O 接口寻址</h3><ol>
+<li>I&#x2F;O 接口与内存共用同一个地址空间。内存与I&#x2F;O 设备之间的唯一区别是所占用的地址不同。</li>
+<li>CPU 利用内存操作指令实现I&#x2F;O 设备管理。</li>
+<li>CPU 利用存储器读&#x2F;写控制信号(MEMR、MEMW)对I&#x2F;O 设备进行读&#x2F;写控制。</li>
+</ol>
+<p>大多数嵌入式微处理器采用存储器映像 I&#x2F;O 接口寻址,采用独立 I&#x2F;O 的也可以采用存储器映像I&#x2F;O 。<br>若采用存储器映像I&#x2F;O 接口寻址,那么I&#x2F;O 端口读写指令与存储器读写指令完全一致  </p>
+<p>  <strong>Standalone BSP</strong>：查表  </p>
+<h3 id="I-O-接口总线控制逻辑"><a href="#I-O-接口总线控制逻辑" class="headerlink" title="I&#x2F;O 接口总线控制逻辑"></a>I&#x2F;O 接口总线控制逻辑</h3><h4 id="地址总线"><a href="#地址总线" class="headerlink" title="地址总线"></a>地址总线</h4><p>  直接译码 &#x2F; 间接地址译码  参考<strong>例7.2</strong>   </p>
+<h4 id="数据总线"><a href="#数据总线" class="headerlink" title="数据总线"></a>数据总线</h4><p>  参考<strong>例7.3</strong> <em>分时</em> <strong>例7.4</strong> <em>锁存后同步</em>  </p>
+<h4 id="控制总线"><a href="#控制总线" class="headerlink" title="控制总线"></a>控制总线</h4><h3 id="独立开关输入接口"><a href="#独立开关输入接口" class="headerlink" title="独立开关输入接口"></a>独立开关输入接口</h3><p>  参照 <strong>例7.5</strong>  用控制总线+状态总线形成三态门的控制信号</p>
+<h3 id="独立发光二极管输出接口"><a href="#独立发光二极管输出接口" class="headerlink" title="独立发光二极管输出接口"></a>独立发光二极管输出接口</h3><p>  参照 <strong>例7.6</strong>  </p>
+<h3 id="矩阵键盘接口"><a href="#矩阵键盘接口" class="headerlink" title="矩阵键盘接口"></a>矩阵键盘接口</h3><p>  参照 <strong>例7.7</strong>  </p>
+<h3 id="七段数码管接口"><a href="#七段数码管接口" class="headerlink" title="七段数码管接口"></a>七段数码管接口</h3><p>  参照 <strong>例7.8&#x2F;7.9</strong> <em>分别为段选&#x2F;位选不共用&#x2F;共用</em>  </p>
+<h3 id="LED-点阵接口"><a href="#LED-点阵接口" class="headerlink" title="LED 点阵接口"></a>LED 点阵接口</h3><p>  参照 <strong>例7.10</strong> <em>没仔细看</em> </p>
+<h3 id="模拟设备并行I-O-接口"><a href="#模拟设备并行I-O-接口" class="headerlink" title="模拟设备并行I&#x2F;O 接口"></a>模拟设备并行I&#x2F;O 接口</h3><p>  <strong>ADC1210</strong>: 延时&#x2F;查询  参照<strong>例7.11</strong>  </p>
+<h3 id="通用并行I-O-接口-GPI-O"><a href="#通用并行I-O-接口-GPI-O" class="headerlink" title="通用并行I&#x2F;O 接口(GPI&#x2F;O)"></a>通用并行I&#x2F;O 接口(GPI&#x2F;O)</h3><p>  基本内容，IP核等概念不单列，以下均为<strong>GPIO 应用示例</strong><br>  <strong>例7.12</strong> 6位独立开关、16位独立LED以及4位七段数码管的程序控制 <em>(大作业)，注意数码管阴阳，最好再仔细看一遍！！</em><br>  <strong>例7.13</strong> AXI总线，GPIO IP核，基于ADC1210实现的模拟信号采样转换接口电路 <em>比较陌生，也没仔细看</em>  </p>
+<h3 id="外设控制器"><a href="#外设控制器" class="headerlink" title="外设控制器"></a>外设控制器</h3><p>  <strong>AXI总线EPC</strong> <em>以下为应用示例，看明白但可能不太会写</em>  </p>
+<ol>
+<li>多通道并行A&#x2F;D 转换器接口  参照<strong>例7.14</strong> </li>
+<li>并行DA 转换器接口  参照<strong>例7.15</strong>  <em>单&#x2F;双缓冲</em>  </li>
+<li>LCD1602A 液晶字符显示模块接口  参照<strong>例7.16</strong>  <em>基本没看</em></li>
+</ol>
+<h2 id="中断技术"><a href="#中断技术" class="headerlink" title="中断技术"></a>中断技术</h2><h3 id="中断控制器构成"><a href="#中断控制器构成" class="headerlink" title="中断控制器构成"></a>中断控制器构成</h3><p>  中断请求信号保持与消除，中断源识别，中断使能控制，中断优先级设置。  </p>
+<h3 id="中断控制器AXI-INTC"><a href="#中断控制器AXI-INTC" class="headerlink" title="中断控制器AXI INTC"></a>中断控制器AXI INTC</h3><p>  记在P314-315  注意<strong>触发模式</strong><br>  普通&#x2F;快速中断模式编程 <strong>P318-319</strong>    </p>
+<p>  中断系统初始化程序主要实现：使能中断控制器中断源输入、中断请求输出；使能微处理器可屏蔽中断；将中断向量填入中断向量表；装载中断服务程序到中断向量处；初始化IO 设备等。<br>  中断服务程序主要完成：中断事务处理、中断状态清除、中断返回以及中断响应过程中的现场保护、现场恢复等功能。<br>  图见<strong>P323</strong>  </p>
+<p>  普通&#x2F;快速中断程序设计 <strong>1.44 1.45</strong> <em>在P325附近</em>  </p>
+<h3 id="中断应用示例"><a href="#中断应用示例" class="headerlink" title="中断应用示例"></a>中断应用示例</h3><p>  <strong>GPIO中断</strong> P327  例1.4<br>  <strong>AXI Timer</strong> P330  例1.5 数码管 例1.6 频率仪  例1.7 PWM 三色灯<br>  <strong>SPI 总线接口中断</strong> P341<br>  ADCS7476 P346</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>微机原理</div>
+      <div>http://example.com/2020/06/27/微机原理/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Adrian</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>June 27, 2020</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/06/28/SLAM-3/" title="SLAM #3 三维空间刚体运动">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">SLAM #3 三维空间刚体运动</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/06/15/SLAM-2/" title="SLAM #2">
+                        <span class="hidden-mobile">SLAM #2</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

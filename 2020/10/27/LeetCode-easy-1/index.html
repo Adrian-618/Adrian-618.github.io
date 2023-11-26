@@ -1,0 +1,758 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" href="/img/favicon.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Adrian">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="将想法付诸实践往往是最困难的，也是最重要的 于是我决定从今天起每周完成10道题，龟兔不限，思考和实践最重要。 像往常一样拉胯，一周我只看了三题半:&#x2F; 以此记录刷题的思考和经验，复习数据结构，学习python和算法。 第一周，学习为主，龟式。 Python知识点class(类)之前做dl的时候就对这个理解的不够深刻，重新补习： 对象是类的实例。 self是必填的形参，内容则被封装到对应的对">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LeetCode-easy-1">
+<meta property="og:url" content="http://example.com/2020/10/27/LeetCode-easy-1/index.html">
+<meta property="og:site_name" content="Adrian">
+<meta property="og:description" content="将想法付诸实践往往是最困难的，也是最重要的 于是我决定从今天起每周完成10道题，龟兔不限，思考和实践最重要。 像往常一样拉胯，一周我只看了三题半:&#x2F; 以此记录刷题的思考和经验，复习数据结构，学习python和算法。 第一周，学习为主，龟式。 Python知识点class(类)之前做dl的时候就对这个理解的不够深刻，重新补习： 对象是类的实例。 self是必填的形参，内容则被封装到对应的对">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/10.27-LeetCode-easy-1/lc7.png">
+<meta property="article:published_time" content="2020-10-27T08:54:41.000Z">
+<meta property="article:modified_time" content="2020-11-07T15:28:55.514Z">
+<meta property="article:author" content="Adrian">
+<meta property="article:tag" content="LeetCode">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/10.27-LeetCode-easy-1/lc7.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>LeetCode-easy-1 - Adrian</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.5-a","typing":{"enable":false,"typeSpeed":50,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"tajs":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Adrian</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" 
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle">LeetCode-easy-1</span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2020-10-27 16:54" pubdate>
+          October 27, 2020
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">LeetCode-easy-1</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p><strong>将想法付诸实践往往是最困难的，也是最重要的</strong></p>
+<p>于是我决定从今天起每周完成10道题，龟兔不限，思考和实践最重要。</p>
+<p><strong>像往常一样拉胯，一周我只看了三题半:&#x2F;</strong></p>
+<p>以此记录刷题的思考和经验，复习数据结构，学习python和算法。</p>
+<p>第一周，学习为主，龟式。</p>
+<h1 id="Python知识点"><a href="#Python知识点" class="headerlink" title="Python知识点"></a>Python知识点</h1><h2 id="class-类"><a href="#class-类" class="headerlink" title="class(类)"></a>class(类)</h2><p>之前做dl的时候就对这个理解的不够深刻，重新补习：</p>
+<p>对象是类的实例。</p>
+<p><code>self</code>是必填的形参，内容则被封装到对应的对象中。调用封装时可以通过对象或者self</p>
+<h2 id="dictionary-字典"><a href="#dictionary-字典" class="headerlink" title="dictionary(字典)"></a>dictionary(字典)</h2><p>定义字典： <code>a = &#123;&#125;</code></p>
+<p><code>d = &#123;key1 : value1, key2 : value2, key3 : value3 &#125;</code> 键唯一不可变，值不唯一，任数据类型</p>
+<p>get()函数返回指定键的值： <code>dict.get(key, default=None)</code></p>
+<p>key为查找的键，default为不存在时的默认值</p>
+<h2 id="enumerate-枚举"><a href="#enumerate-枚举" class="headerlink" title="enumerate(枚举)"></a>enumerate(枚举)</h2><p>enumerate()函数将可遍历数据对象组合为索引序列，同时列出数据和数据下标，可以设定下标起始位置</p>
+<p><code>enumerate(sequence, [start=0])</code></p>
+<h2 id="slice-切片"><a href="#slice-切片" class="headerlink" title="slice(切片)"></a>slice(切片)</h2><p>此处的slice不指函数，而是python对有序序列的一种处理方式</p>
+<p>前置知识：python所有有序序列都支持负向索引</p>
+<p><code>a=&#39;hello&#39;</code> 的下标正反如下</p>
+<table>
+<thead>
+<tr>
+<th align="left">0</th>
+<th>1</th>
+<th>2</th>
+<th>4</th>
+<th>3</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">-5</td>
+<td>-4</td>
+<td>-3</td>
+<td>-1</td>
+<td>-2</td>
+</tr>
+</tbody></table>
+<p>那么对于切片:</p>
+<p><code>b=a[i:j:k]</code> 从下标i开始到<strong>j-1</strong>结束，步长为k，(k为非零整数，j-1结束是因为j侧为<strong>开区间</strong>！)</p>
+<p><code>b=a[i:j]</code>  默认k为1</p>
+<p><code>b=a[:j]</code> 默认i为0</p>
+<p><strong>k&gt;0时，i默认为0，j默认为len(a) ; k&lt;0时，i默认为-1，j默认为-len(a)-1</strong>(同上，j侧是开区间)</p>
+<p>那么，<code>b=a[::-1]</code> 按照上述规则，则是从-1开始，直到边界，也就是inverse！</p>
+<p>注意，dictionary(字典)和set(集合)是不能通过下标访问的</p>
+<p>在numpy中，引入了’’,’符号，用来分隔不同维度。用到时再仔细学习！</p>
+<h2 id="if-else-语句的多种写法"><a href="#if-else-语句的多种写法" class="headerlink" title="if-else 语句的多种写法"></a>if-else 语句的多种写法</h2><p>基本知识的补习。</p>
+<p>常规写法：</p>
+<p><code>if :   elif:   else:  </code></p>
+<p>表达式：  <code>c = a if a&gt;b else b</code></p>
+<p>二维表：<code>c = [a,b][a&lt;b]</code> 注意，后面中括号为<strong>TRUE</strong>时前面取<strong>右侧</strong>，<strong>FALSE</strong>取<strong>左侧</strong>！</p>
+<p>逻辑运算符：<code>c = (a&gt;b and a or b)</code> 这个有点意思，理解一下，前真返回and后的值，前假返回or后的值，但是如果and后面是FALSE，即使前真，仍然返回or后的值。即——and 只做否定，or只做肯定。</p>
+<h1 id="Problems"><a href="#Problems" class="headerlink" title="Problems"></a>Problems</h1><h2 id="1-Two-Sum"><a href="#1-Two-Sum" class="headerlink" title="1. Two Sum"></a>1. Two Sum</h2><p>做第一题的明显感受：<strong>python真的还不太会</strong>。</p>
+<p>于是直接放弃自己求解，有了上面的基础知识补习。还好底子还在，查点资料理解代码没问题。</p>
+<p>暴力思路双重循环，很显然的复杂度比较高 $O(n^2)$。</p>
+<p>1100ms的思路用一个循环，枚举的过程中if判断是否存在不重合的sum值。</p>
+<p>高分答案和考点契合，使用<strong>哈希表</strong>大幅减少复杂度</p>
+<p>(构造方法，冲突解决都还需要再复习)</p>
+<h2 id="7-Reverse-Integer"><a href="#7-Reverse-Integer" class="headerlink" title="7. Reverse Integer"></a>7. Reverse Integer</h2><p>第一想法是用数组把每一位存起来然后输出，可以从最远位往回存，然后从第一个非0数开始输出</p>
+<p>答案：栈思想？反转是一个经典的入栈出栈操作。答案中实现pop&#x2F;push用的是模，乘，除。</p>
+<p>对于python，显然不需要这么复杂，学习了上面的slice操作之后，答案就一目了然了。</p>
+<p>仍然存在的问题是越界判断，按照题目的描述(我的理解)，应该是系统只有32位，所以不能先算出来prevent pseudo-overflows，而是要边加边判断。那么slice的时候怎么解决这个问题？</p>
+<p>看了半天讨论和回复，目前我的理解是python本身对数据类型或者说数据长度没有限定，所以本身不会检测出问题。从代码逻辑上讲，slice就不能很好的预判overflow。看到submission里有用答案方法实现的，在每次加数之前预判会不会超，我觉得是比较合理的答案。不过讨论里说的对——</p>
+<p><img src="/10.27-LeetCode-easy-1/lc7.png" srcset="/img/loading.gif" lazyload alt="lc7"></p>
+<p>哈哈</p>
+<h2 id="9-Palindrome-Number"><a href="#9-Palindrome-Number" class="headerlink" title="9. Palindrome Number"></a>9. Palindrome Number</h2><p>回文数检测(含符号)，follow up让不要转string，那么正常思路顺着也就是把它转成string，然后可能可以读正负下标比较是否相同?</p>
+<p>想了一下，直接取绝对值转str，inverse，再转int，比较是否和原数相等即可!第一次自己完成了一道题并且一次accepted，值得庆祝！</p>
+<p>仍然需要注意第七题里的overflow问题！这里我没有管也可以通过，因为比较的是是否相等，再加上python是不存在长度限制的，所以就不会有问题。假如要考虑的话，应该要像第七题一样在inverse的时候检查不溢出，这样就麻烦了，不如string一个个对比。</p>
+<p>读了一下solution，突然就明白了，其实本质和上一题是一样的，假如用slice的思想，就没法检查溢出，但是如果要检查溢出，也就达到了不用string的目的了，直接做数学运算就好了。</p>
+<p>当然，答案的想法也很有意思，revert一半的数字，也就不用查溢出了！对于奇数位的处理则是<code>return x == revertedNumber || x == revertedNumber/10;</code>  确实很精妙。</p>
+<p>看了下comments，似乎我的代码还复杂了一点点，反正负数肯定不对，也没必要取绝对值。转成string之后可以直接和<code>temp</code>作比较，就没必要再转来转去了，应该会更快？</p>
+<p>不过追求几秒的速度好像没啥意义。下次自己写一下答案这样的解法。</p>
+<h2 id="13-Roman-to-Integer"><a href="#13-Roman-to-Integer" class="headerlink" title="13. Roman to Integer"></a>13. Roman to Integer</h2><p>读完题目，大致感觉一下，最常规的做法应该是把字符串转成对应的整数，然后判断相邻数的关系，若递增则相加，若递减则变号一次。如果算ASCII码会不会比较快？</p>
+<p>按自己的思路试试，反正好玩儿么。I73，V86，X88，L76，C67，D68，M77</p>
+<p>看了一个答案很厉害，基于这个基础的想法在逻辑上做到了优化。通过右读的方式，假如已有数比“减法”时的大数要小，则必然是加，反之则一定是减(语言有点描述不清，代码很好理解。)</p>
+<p>对python，看起来大家都是先用字典转换成整型，再直接从左往右做运算？这样感觉很常规。先加，加完如果加数比上一个加数大，再减两倍加数…</p>
+<p>与此同时我发现ASCII码不太靠谱了，这样的话没法儿直接运算，还得先判断是个啥数再换算…</p>
+<p>速度更快的答案就是像上面说的逻辑一样，slice取反右读计算，但是好像逻辑上说没啥本质区别…</p>
+<p>这个题就这样吧，sigh</p>
+<h2 id="14-Longest-Common-Prefix"><a href="#14-Longest-Common-Prefix" class="headerlink" title="14. Longest Common Prefix"></a>14. Longest Common Prefix</h2><p>最简单的方法应该是二维数组n次比较，假如某位均相等则记录，再到下一个位。这样感觉时间复杂度会比较高，考虑用哈希表存每一位，然后扫描完一位再读一遍哈希表，看有没有等于n的，有就记录清零到下一位。</p>
+<p>自以为的常规思路和哈希都写了，哈希稍微快了一些，有一些成就感吧 : &#x2F; </p>
+<p>对比高分答案在我这里跑出来的结果，基本也都是这个水平，还是很满意了，在第一梯队，哈哈！</p>
+<p>阅读答案学习了一下，</p>
+<ol>
+<li><p><strong>Horizontal scanning</strong> 是两两找出最长同前缀，然后再把这个前缀和第三个找。我好像根本没这样考虑问题，可能是潜意识里觉得这样比较慢？</p>
+</li>
+<li><p><strong>Vertical scanning</strong> 就是我的思路了，逐个字母去比较。</p>
+</li>
+<li><p><strong>Divide and conquer</strong> 分而治之，在1的基础下做了分片</p>
+</li>
+<li><p><strong>Binary search</strong> 对一个字符串二分，然后先比较前一半是否相等。这个有点新颖。</p>
+</li>
+</ol>
+<p>看到一个让我感到精妙的答案， 虽然速度可能没特别快，但是很有意思。用的是list.sort()和zip()函数。前者将列表按字母排序，这样第一个和最后一个一定是最不相同的，即假如他们的某位都一样，那么中间部分这一位一定一样。zip则把这两个字符串转成元组，然后就可以方便的成对比较。高，实在是高！</p>
+<p>这一题有一点警示就是一定要先处理异常，比如本题的空集。然后如此多的解法也是很有启发性的，针对不同的具体情况可以采用不一样的解决方案。值得过阵子再来学习一下。</p>
+<h2 id="20-Valid-Parentheses"><a href="#20-Valid-Parentheses" class="headerlink" title="20. Valid Parentheses"></a>20. Valid Parentheses</h2><p>第一想法有点奇葩，想用整数和整除来写一个表达式判断。琢磨了半天，发现很难实现。</p>
+<p>仔细一想，从中间向两边判断应该是比较合理的，正好长度必须是偶数。</p>
+<p>查表发现成对括号的ASCII码差值小于3</p>
+<p>写完测试的时候意识到，最中间的一对不一定需要相等！也可以两侧相等</p>
+<p>改了半天，发现中间的两侧也不一定就相等了，卧槽…心碎了都。搞不定了，看答案</p>
+<p>按intuition，还是应该从左向右寻找，可以成对即删除。啊我为了减少循环次数，弄的太复杂了！把失败品记录一下吧。</p>
+<p><strong>突然就意识到自己有多么愚蠢，艹！</strong></p>
+<p>按照intuition直接写了，提交上去发现自己太naive，可以({)} !!! 有点想不动了，继续看答案 &#x3D;&#x3D;</p>
+<p>看了下别人的答案，感觉这题应该用栈来解，括号问题的精髓在于，它必须有两个连续可解的数！或许这样我也可以延续刚刚的想法改一下自己的代码？</p>
+<p>于是我得到了一个慢的起飞的答案 : &#x2F;</p>
+<p>改用人家的栈，简直不在一个量级。这就是数据结构的魅力吧。</p>
+<p><strong>为啥我就这么傻逼没想到栈？</strong></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Pragmatic-Work/" class="category-chain-item">Pragmatic Work</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/LeetCode/" class="print-no-link">#LeetCode</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>LeetCode-easy-1</div>
+      <div>http://example.com/2020/10/27/LeetCode-easy-1/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Adrian</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>October 27, 2020</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/10/30/10-30%E8%B0%88%E8%AF%9D%E6%9C%89%E6%84%9F/" title="10.30谈话有感">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">10.30谈话有感</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/10/25/%E9%95%BF%E6%B2%99/" title="长沙">
+                        <span class="hidden-mobile">长沙</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

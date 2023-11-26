@@ -1,0 +1,702 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" href="/img/favicon.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Adrian">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="第一篇正经读的Security文章，可以预见的是会遇到很多困惑和问题，所以写文章记录一下。 Concepts因为我们关注的是机器学习系统的安全和隐私问题，因此首先需要理清两个领域相关概念：机器学习系统是怎样的，怎样评价这个系统是否“secure and private”? Machine LearningML Security and Privacy主要考虑监督学习。对于一个机器学习模型，将它的训">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Security and Privacy in Machine Learning">
+<meta property="og:url" content="http://example.com/2021/04/02/Security-and-Privacy-in-Machine-Learning/index.html">
+<meta property="og:site_name" content="Adrian">
+<meta property="og:description" content="第一篇正经读的Security文章，可以预见的是会遇到很多困惑和问题，所以写文章记录一下。 Concepts因为我们关注的是机器学习系统的安全和隐私问题，因此首先需要理清两个领域相关概念：机器学习系统是怎样的，怎样评价这个系统是否“secure and private”? Machine LearningML Security and Privacy主要考虑监督学习。对于一个机器学习模型，将它的训">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/3.29-Security-and-Privacy-in-Machine-Learning/image-20210403161309212.png">
+<meta property="og:image" content="http://example.com/2021/04/02/Security-and-Privacy-in-Machine-Learning/3.29-Security-and-Privacy-in-Machine-Learning/image-20210403203515889.png">
+<meta property="article:published_time" content="2021-04-02T12:17:58.000Z">
+<meta property="article:modified_time" content="2021-04-06T12:06:05.903Z">
+<meta property="article:author" content="Adrian">
+<meta property="article:tag" content="Security">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/3.29-Security-and-Privacy-in-Machine-Learning/image-20210403161309212.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Security and Privacy in Machine Learning - Adrian</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.5-a","typing":{"enable":false,"typeSpeed":50,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"tajs":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Adrian</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" 
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle">Security and Privacy in Machine Learning</span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2021-04-02 20:17" pubdate>
+          April 2, 2021
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Security and Privacy in Machine Learning</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>第一篇正经读的Security文章，可以预见的是会遇到很多困惑和问题，所以写文章记录一下。</p>
+<h2 id="Concepts"><a href="#Concepts" class="headerlink" title="Concepts"></a>Concepts</h2><p>因为我们关注的是机器学习系统的安全和隐私问题，因此首先需要理清两个领域相关概念：机器学习系统是怎样的，怎样评价这个系统是否“secure and private”?</p>
+<h3 id="Machine-Learning"><a href="#Machine-Learning" class="headerlink" title="Machine Learning"></a>Machine Learning</h3><p>ML Security and Privacy主要考虑监督学习。对于一个机器学习模型，将它的训练(Training)和推理(Inference)分开有助于我们讨论后续问题。</p>
+<p>摘录论文原文对Training的描述：</p>
+<blockquote>
+<p>Most ML models can be described as functions $h_θ(x)$ taking an input $x$ and parametrized by a vector $θ ∈ Θ$. The output $h_θ(x)$ is the model’s prediction for $x$ of some property of interest.</p>
+</blockquote>
+<p>在Inference时，则是有固定的$\theta$，对新的输入$x$求输出$h_θ(x)$.</p>
+<p><img src="/3.29-Security-and-Privacy-in-Machine-Learning/image-20210403161309212.png" srcset="/img/loading.gif" lazyload alt="image-20210403161309212"></p>
+<p>上图一般化地表征了一个Maching Learning System的使用pipeline，并给出了两个实例。</p>
+<h3 id="Threat-Model"><a href="#Threat-Model" class="headerlink" title="Threat Model"></a>Threat Model</h3><p>威胁模型是什么？ 我的理解就是找出高风险、易受攻击的点，然后设法保护它们。</p>
+<blockquote>
+<p>The security of any system is measured with respect to the adversarial goals and capabilities that it is designed to defend against–the system’s <em>threat model</em>.</p>
+</blockquote>
+<p>从另一个角度看，它也是攻击者可支配的行为和信息的总和</p>
+<blockquote>
+<p>A threat model is also defined by the actions and information the adversary has at their disposal.</p>
+</blockquote>
+<p>由此就可以谈到攻击面(<strong>attack surface</strong>)，后面会从前图上不同的stage阐述攻击方式和类型。</p>
+<blockquote>
+<p>What Is an Attack Surface? The attack surface is the number of all possible points, or attack vectors, where an unauthorized user can access a system and extract data. The smaller the attack surface, the easier it is to protect.</p>
+</blockquote>
+<p>此处可以介绍一个和threat model听起来比较对称的概念：<strong>Trust Model</strong>.  实际上，我理解它表示的是一组权限或者规则，给系统中的每类个体设置对应的信任权限，例如哪些内容可以被访问，修改等等。</p>
+<p>根据trust model的不同，该模型的攻击能力(<strong>Adversarial Capabilities</strong>)也有差异，可以理解为系统对攻击者的暴露程度，可以被获取的内容越多，攻击能力越强，反之则弱。</p>
+<img src="3.29-Security-and-Privacy-in-Machine-Learning/image-20210403203515889.png" srcset="/img/loading.gif" lazyload alt="image-20210403203515889" style="zoom:75%;" />
+
+<p>介绍完对抗能力，理所应当的应该有细分指标来具体区分一个攻击者的目标，即对抗目标(<strong>Adversarial Goals</strong>). 此处引入一些核心要素，并试图从ML system的角度做一点解释：</p>
+<p>首先是CIA三要素：</p>
+<p><strong>Confidentiality</strong>: 即保密性，在这里一般指模型对未授权用户保密，强调不能访问<br><strong>Integrity</strong>: 即完整性，此处的完整可以理解为数据的原始，即不能被修改<br><strong>Availability</strong>: 即可用性，具体说就是模型的输出应当是及时准确且可被获取的</p>
+<p>除此以外，还有几个需要额外强调的要素，</p>
+<p><strong>Privacy</strong>: 隐私性，和Confidentiality基本对应，指的是用户信息对不受信任的模型提供者或其他用户加密。</p>
+<p>值得一提的是，在以上四组概念里，C&amp;P 和 I&amp;A从攻击者的方法和目的上看是高度相关的。因此在讨论安全时有时可以一起看待。</p>
+<hr>
+<p>接下来，按照对抗的阶段和能力，目的和攻击面，逐个介绍对抗设置和解决方法。</p>
+<h2 id="Integrity"><a href="#Integrity" class="headerlink" title="Integrity"></a>Integrity</h2><p>通常来说，对完整性的侵害主要是对抗攻击。主要的类型又分为投毒攻击和逃逸攻击，分别对Train 和 Inference 阶段进行攻击，下面分别详述。</p>
+<h3 id="Poisoning-Attack——Training"><a href="#Poisoning-Attack——Training" class="headerlink" title="Poisoning Attack——Training"></a>Poisoning Attack——Training</h3><p>在展开前补充，由文章，训练过程中ML本身不会影响模型和数据的confidentiality和privacy，而只是取决于攻击者对整个系统的accessibility，所以不讨论。在此Availability又是由<strong>Integrity</strong>决定的，所以对于Training，我们可以只关注adversary如何操纵数据来影响Intergrity。在图2的四种capabilities中，read无法影响Integrity，logic corruption则似乎过于理想(<em>在我浅薄的认知中，如果adversary能够改动ML model的logic，这个系统相当于完全被操控了，任何安全都无法得到保障。</em>)</p>
+<p>某种意义上说，对训练数据的攻击可以视为在试图造成训练和推断之间的数据分布错配，文中用<strong>distribution drifts</strong> 来描述这种篡改训练数据引起的现象。</p>
+<p>在训练过程中的攻击总是需要对该模型的学习流程有一定的了解，以便于操纵数据来扰乱模型。根据可获得信息量的多少，攻击者可能可以改变label，也可能可以改变训练集的输入特征。</p>
+<p>要说Label Manipulation，可以举一个经典案例，对二元SVM分类器的training labels做翻转处理。仅仅随机的做翻转就能比较有效地降低预测性能，而对标签有所筛选(目的是找出对模型影响最大的那些数据)能够以更少的修改量获得更大的干扰程度。</p>
+<p>操作输入则更符合我们对投毒的字面理解，即通过非正常的或者有害的输入来污染模型，恶意地造成了数据的分布变化。更详细的说，可以再次分类如下：</p>
+<ol>
+<li><strong>Model Skewing</strong> 模型偏移，主要是通过修改训练数据，最后让模型的<strong>boundary</strong>发生偏离(往往是向着对攻击者有利的一侧，例如让False被判断为True)</li>
+<li><strong>Feedback Weaponization</strong> 反馈武器化，举个通俗但不一定恰当的例子，2017年，特朗普支持者们大规模在应用市场给CNN打一星，成功降低了它的评分。(水军)</li>
+<li></li>
+</ol>
+<h3 id="Inference"><a href="#Inference" class="headerlink" title="Inference"></a>Inference</h3><h4 id="Evasion-Attack"><a href="#Evasion-Attack" class="headerlink" title="Evasion Attack"></a>Evasion Attack</h4><p>首先可以介绍逃逸攻击，它也是主流的攻击方式之一，那张流传甚广的熊猫图就可以作为典例。理解含义，evasion更像是躲避&#x2F;欺骗过机器学习系统的判断</p>
+<p>此处可以开始介绍对抗样本生成</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Pragmatic-Work/" class="category-chain-item">Pragmatic Work</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Security/" class="print-no-link">#Security</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Security and Privacy in Machine Learning</div>
+      <div>http://example.com/2021/04/02/Security-and-Privacy-in-Machine-Learning/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Adrian</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>April 2, 2021</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/04/06/A-Survey-on-Generating-Adversarial-Examples/" title="A Survey on Generating Adversarial Examples">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">A Survey on Generating Adversarial Examples</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/03/31/%E6%98%A5/" title="春">
+                        <span class="hidden-mobile">春</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

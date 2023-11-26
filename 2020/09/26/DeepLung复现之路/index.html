@@ -1,0 +1,711 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" href="/img/favicon.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Adrian">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="不得不说最近在这个项目上有所懈怠，最近的事情协调的不太好。 0.配置服务器准备工作跟徐博说了一句，从师兄那里要来了服务器。不是很困难，但是卡在了意料之外的地方——Xshell的安装 说来很搞笑，Xshell也下载的很顺利，但是安装的时候没办法把字体文件写入Windows\Fonts 显然我觉得是管理员权限的问题，但是事情并没有意料中的那么简单。花了一下午的时间，没能解决这个问题，只好作罢。最后找了">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DeepLung复现之路">
+<meta property="og:url" content="http://example.com/2020/09/26/DeepLung%E5%A4%8D%E7%8E%B0%E4%B9%8B%E8%B7%AF/index.html">
+<meta property="og:site_name" content="Adrian">
+<meta property="og:description" content="不得不说最近在这个项目上有所懈怠，最近的事情协调的不太好。 0.配置服务器准备工作跟徐博说了一句，从师兄那里要来了服务器。不是很困难，但是卡在了意料之外的地方——Xshell的安装 说来很搞笑，Xshell也下载的很顺利，但是安装的时候没办法把字体文件写入Windows\Fonts 显然我觉得是管理员权限的问题，但是事情并没有意料中的那么简单。花了一下午的时间，没能解决这个问题，只好作罢。最后找了">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/9.26-DeepLung%E5%A4%8D%E7%8E%B0%E4%B9%8B%E8%B7%AF/image-deeplung.png">
+<meta property="og:image" content="http://example.com/9.26-DeepLung%E5%A4%8D%E7%8E%B0%E4%B9%8B%E8%B7%AF/image-20210326162110589.png">
+<meta property="article:published_time" content="2020-09-26T13:56:53.000Z">
+<meta property="article:modified_time" content="2021-03-26T14:51:49.281Z">
+<meta property="article:author" content="Adrian">
+<meta property="article:tag" content="Deep Learning">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/9.26-DeepLung%E5%A4%8D%E7%8E%B0%E4%B9%8B%E8%B7%AF/image-deeplung.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>DeepLung复现之路 - Adrian</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.5-a","typing":{"enable":false,"typeSpeed":50,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"tajs":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Adrian</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" 
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle">DeepLung复现之路</span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2020-09-26 21:56" pubdate>
+          September 26, 2020
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">DeepLung复现之路</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>不得不说最近在这个项目上有所懈怠，最近的事情协调的不太好。</p>
+<h2 id="0-配置服务器"><a href="#0-配置服务器" class="headerlink" title="0.配置服务器"></a>0.配置服务器</h2><h3 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h3><p>跟徐博说了一句，从师兄那里要来了服务器。不是很困难，但是卡在了意料之外的地方——Xshell的安装</p>
+<p>说来很搞笑，Xshell也下载的很顺利，但是安装的时候没办法把字体文件写入<code>Windows\Fonts</code></p>
+<p>显然我觉得是管理员权限的问题，但是事情并没有意料中的那么简单。花了一下午的时间，没能解决这个问题，只好作罢。最后找了一个解压即用的破解版，算是使上了。</p>
+<p>Xshell的设置，或者说服务器的使用，比想象的简单不少。CSDN照葫芦画瓢，很快就可以用了。</p>
+<h3 id="基本运行环境"><a href="#基本运行环境" class="headerlink" title="基本运行环境"></a>基本运行环境</h3><p>装anaconda 1903时出现<code>WARNING: The conda.compat module is deprecated and will be removed in a future release.</code></p>
+<p>更新conda后问题不再出现。一直担心cuda的版本会在后期引起问题，不过实在不想弄明白了，先用着吧。</p>
+<p>装pytorch 没换源，感觉速度好像还行的样子。两遍成功</p>
+<p><strong>accident:</strong> pycharm 到期了，重新激活很麻烦。完了服务器还坏了两天，hhh</p>
+<p>服务器修好了还没过pycharm审核，于是乎转战VSCode. 重配环境，</p>
+<h3 id="配置vsc连服务器"><a href="#配置vsc连服务器" class="headerlink" title="配置vsc连服务器"></a>配置vsc连服务器</h3><p><strong>感谢CSDN上的前辈们！</strong></p>
+<p>遵循<a target="_blank" rel="noopener" href="https://blog.csdn.net/maokelong95/article/details/91801944">「VS Code」如何通过跳板机连接服务器进行远程开发</a>，大致没有问题。</p>
+<p><code>S3.3</code>中的config不能正确的运行。最开始出问题是我一直不点“continue”[尴尬]，后来还是没解决，换了<a target="_blank" rel="noopener" href="https://blog.csdn.net/dcz1994/article/details/103120254">这里</a>的代码，可以连跳板机了，但是在连上跳板机后，连服务器时报错<code>“posix_spawn: No such file or directory”</code>, 再次<a target="_blank" rel="noopener" href="https://blog.csdn.net/change_things/article/details/108523088">CSDN</a>解决。</p>
+<p>VSCode一直提醒我git版本过低，最开始以为是本机，也确实不是最新的，但是奇怪的是一直更新不了，挂上tz后直接没反应。后来意识到是服务器的git版本太低，遵循<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_28903377/article/details/86148687">Centos下升级git版本</a>完成了绝大多数操作，版本换成了最新版。问题出在服务器上，最后写入环境变量时一直提示没有权限，要用su才可以。</p>
+<p>最终结果：vscode可以直接连服务器，还未测试代码功能，但是已经感觉会比Xshell香了！</p>
+<h3 id="代码及数据集准备"><a href="#代码及数据集准备" class="headerlink" title="代码及数据集准备"></a>代码及数据集准备</h3><p>这时候遇到了传文件的问题。lrzsz不能传大文件，sftp不太会玩，有跳板机也不好配置，最后用Xftp很轻易的解决了。</p>
+<p>记录服务器上的各个库版本备查：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">python <span class="hljs-number">3.7</span><span class="hljs-number">.3</span>	numpy <span class="hljs-number">1.16</span><span class="hljs-number">.2</span>	matplotlib <span class="hljs-number">3.0</span><span class="hljs-number">.3</span>	scipy <span class="hljs-number">1.2</span><span class="hljs-number">.1</span>	<br>scikit-image <span class="hljs-number">0.14</span><span class="hljs-number">.2</span>		SimpleITK <span class="hljs-number">2.0</span><span class="hljs-number">.0</span>		pyparsing <span class="hljs-number">2.3</span><span class="hljs-number">.1</span>		pytorch <span class="hljs-number">1.6</span><span class="hljs-number">.0</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="1-预处理与训练"><a href="#1-预处理与训练" class="headerlink" title="1.预处理与训练"></a>1.预处理与训练</h2><p>预处理，修改config_training.py的路径后成功运行。因为这里只是想测试，所以只用一个数据集做训练，验证等等。</p>
+<p><em>服务器突然崩了…刷英语去</em></p>
+<p>服务器弄好了，下一步，走detection.</p>
+<p>运行代码的时候犯了低级错误，<code>sys.path.append</code>忘了改，难怪一直nt出不来。</p>
+<p>改完之后直接运行，报错缺库，pynvml. 在服务器上直接装上之后，意识到装python 3.68上了，conda里没有。直接<code>conda install</code>找不到对应的包，通过<code>anaconda search -t conda</code>解决问题。</p>
+<p>继续运行，报错<code>No module named &#39;base&#39;</code>。之前一直没解决，现在想来可能是代码里没定义好训练参数导致。最后是用终端直接输入了GitHub里的代码<code>python main.py --model dpn3d26 -b 8 --save-dir dpn3d26/retrft96X/ --epochs 1000 --config config_training</code></p>
+<p>相比起之前学习MNIST，这可以算是自己第一次炼丹了hhh，虽然还是糊里糊涂。</p>
+<p>截图留念<img src="/9.26-DeepLung%E5%A4%8D%E7%8E%B0%E4%B9%8B%E8%B7%AF/image-deeplung.png" srcset="/img/loading.gif" lazyload alt="image-20201015193840647"></p>
+<h2 id="2-测试"><a href="#2-测试" class="headerlink" title="2.测试"></a>2.测试</h2><p>今天过来跑test。</p>
+<p>直接运行readme的代码，报错，内存溢出。<code>RuntimeError: CUDA out of memory.</code></p>
+<p>冥思苦想了很久，改来改去，没什么实际变化。中间学习了一下with no_grad，没改善。</p>
+<p>在zyh的提醒下想到去看issue，的确有人提出过这个问题。目前看来是margin和side_len太大，导致图像过大没法儿被处理。在原作者的眼里应该是预处理做的不够好，不过我看大家的意思，可能test部分的代码的确有问题hhh。</p>
+<p>修改<code>sidelen = 96</code>后爆内存问题解决。新问题出现：</p>
+<p><code>splitlist.append(len(data)) AttributeError: &#39;range&#39; object has no attribute &#39;append&#39;</code></p>
+<p>类和列表的关系有点没搞明白，暂时没解决。</p>
+<p>在class里定义了<a target="_blank" rel="noopener" href="https://zhidao.baidu.com/question/494813059728412252.html">类型转换</a>，似乎解决了问题。</p>
+<p><code>splitlist = list(range(0,len(data)+1,n_per_run))</code></p>
+<p><code>elapsed time is 154.83 seconds</code></p>
+<p>下一步测试后处理，改了半天文件路径，遇到的第一个代码上的小问题应该是open csv一直路径错误。琢磨了半天，应该是open指令只能创建文件，不能直接创建文件夹，手动解决。</p>
+<p>新问题：<code>Data is not binary and pos_label is not specified</code></p>
+<p>一开始以为是因为进去的list都是float，研究了半天，左改右改，发现是exclusion里面全都是True!</p>
+<p>有点迷惑，怀疑是不是前面哪里出问题了，联想到测试的时间和文件夹大小结果有点对不上，或许前面还有问题吧。暂时不想管了，休息一下后面再考虑。</p>
+<p>和徐博聊了下，自己也意识到了，可能是训练集和验证集重复的原因，今天跳板机出了点问题，明天来研究。</p>
+<p>用subset8做验证集，仍然报错。这时候用代码里训练好的模型跑了一遍，发现npy文件显著的小了(这可能证明我的模型也有一点小问题，随后再来检查)。但是此时上述问题仍然没解决。思来想去，把前面我改的一系列类型转换都改回去，发现这个错误解决了！<strong>真·写bug</strong></p>
+<p>此时运行出现新问题：<code>IndexError: range object index out of range</code> 换环境暂时没解决</p>
+<p>修改eps的范围得到了结果，运行noduleCADEvaluationLUNA16compare时报错<code>ValueError: &#39;seriesuid&#39; is not in list</code></p>
+<p>检查发现，是生成的dpn26bs32.csv写入没写好，所有数据和标签都写到一栏里面了…</p>
+<p>同时发现问题，并不需要跑这个代码，不过这个文件似乎还是得用？有点没理解，累了不想弄了。</p>
+<p>跑了下他的csv，可以得图，但是用他的模型训出来的predanno作图出来是空白的，可能是annotations的问题？用自己的模型训出来的predanno更离谱，仍然报not binary的错误，我看了下csv，不知道是不是因为probability全部都是同一个小于0.5的值引起的。至于为什么会这样我仍然不清楚。今天先到此为止</p>
+<p>重新训一个resnet的，早上过来发现断掉了，不过有480个eps应该也能用了。跑了一下test，又遇到了内存爆炸的问题，这次是在<code>dataLoader</code>里面把<code>num_works</code>改成0.  跑出来测试集，还是有很大的pbb.npy，害。</p>
+<p>更大的问题随之而来了： 运行<code>frocwrtdetpepchluna16.py</code>的时候(连续两次)服务器宕机，怀疑有什么内存问题…不太敢跑了。</p>
+<p>用自带模型跑，不报错，0结果。换zyh的试了试，确实能复现他自己的结果。但是把我的csv放到他这里也不行…我有点不明白了。怀疑是annotations的问题，今天改一下试试。</p>
+<p>用zyh的代码把annotations文件改完，终于有图了！谢天谢地。不过图特别矮(歪)，还要再琢磨下。</p>
+<p>记录FROC   sensitivity  <strong>评价体系</strong></p>
+<p>白老师  曲线</p>
+<p>r-cnn</p>
+<p><img src="/9.26-DeepLung%E5%A4%8D%E7%8E%B0%E4%B9%8B%E8%B7%AF/image-20210326162110589.png" srcset="/img/loading.gif" lazyload alt="image-20210326162110589"></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Pragmatic-Work/" class="category-chain-item">Pragmatic Work</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Deep-Learning/" class="print-no-link">#Deep Learning</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>DeepLung复现之路</div>
+      <div>http://example.com/2020/09/26/DeepLung复现之路/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Adrian</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>September 26, 2020</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/09/28/%E5%A4%A7%E4%B8%89%E4%BA%BA%E6%B0%91%E5%A5%96%E5%AD%A6%E9%87%91%E8%AF%84%E9%80%89%E6%9C%89%E6%84%9F/" title="大三人民奖学金评选有感">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">大三人民奖学金评选有感</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/09/18/Deep-Learning%E7%AC%94%E8%AE%B0-1/" title="Deep Learning笔记-1">
+                        <span class="hidden-mobile">Deep Learning笔记-1</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
